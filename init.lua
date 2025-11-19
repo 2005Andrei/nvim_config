@@ -69,8 +69,7 @@ vim.opt.modifiable = true                          -- Allow buffer modifications
 vim.opt.encoding = "UTF-8"                         -- Set encoding
 
 -- Cursor settings
-vim.opt.guicursor = "n-v-c:block,i-ci-ve:block,r-cr:hor20,o:hor50,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
-
+vim.opt.guicursor = "n-v-c:block,i-ci-ve:block-blinkwait700-blinkoff400-blinkon250,r-cr:hor20,o:hor50,a:Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
 -- Folding settings
 vim.opt.foldmethod = "expr"                        -- Use expression for folding
 vim.opt.foldexpr = "nvim_treesitter#foldexpr()"    -- Use treesitter for folding
@@ -93,6 +92,28 @@ vim.keymap.set('i', '[', '[]<Left>', { noremap = true })
 vim.keymap.set('i', '{', '{}<Left>', { noremap = true })
 vim.keymap.set('i', '"', '""<Left>', { noremap = true })
 vim.keymap.set('i', "'", "''<Left>", { noremap = true })
+
+-- Delete both brackets if they're next to one another
+vim.keymap.set('i', '<BS>', function()
+  local col = vim.fn.col('.')
+  local line = vim.fn.getline('.')
+  local prev_char = line:sub(col - 1, col - 1)
+  local next_char = line:sub(col, col)
+  
+  local pairs = {
+    ['('] = ')',
+    ['['] = ']',
+    ['{'] = '}',
+    ['"'] = '"',
+    ["'"] = "'"
+  }
+  
+  if pairs[prev_char] == next_char then
+    return '<Del><BS>'
+  else
+    return '<BS>'
+  end
+end, { expr = true, noremap = true })
 
 -- Y to EOL
 vim.keymap.set("n", "Y", "y$", { desc = "Yank to end of line" })
