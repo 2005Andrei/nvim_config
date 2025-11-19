@@ -1,5 +1,4 @@
 -- This is a minimal config. Adopted from https://github.com/radleylewis/nvim-lite, and changed some things for windows
--- I will be changing this periodically, if I remember to upload the file
 
 vim.cmd.colorscheme("evening")
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
@@ -87,6 +86,13 @@ vim.g.maplocalleader = " "                         -- Set local leader key (NEW)
 
 -- Normal mode mappings
 vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
+
+-- Auto-close brackets, braces, and quotes
+vim.keymap.set('i', '(', '()<Left>', { noremap = true })
+vim.keymap.set('i', '[', '[]<Left>', { noremap = true })
+vim.keymap.set('i', '{', '{}<Left>', { noremap = true })
+vim.keymap.set('i', '"', '""<Left>', { noremap = true })
+vim.keymap.set('i', "'", "''<Left>", { noremap = true })
 
 -- Y to EOL
 vim.keymap.set("n", "Y", "y$", { desc = "Yank to end of line" })
