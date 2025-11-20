@@ -93,6 +93,23 @@ vim.keymap.set('i', '{', '{}<Left>', { noremap = true })
 vim.keymap.set('i', '"', '""<Left>', { noremap = true })
 vim.keymap.set('i', "'", "''<Left>", { noremap = true })
 
+-- Annoyance fix for {}
+vim.keymap.set('i', '<CR>', function()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local before = line:sub(col, col)
+  local after = line:sub(col + 1, col + 1)
+  
+  -- Check if cursor is between matching pairs
+  if (before == '{' and after == '}') or
+     (before == '[' and after == ']') or
+     (before == '(' and after == ')') then
+    return '<CR><Esc>O'
+  else
+    return '<CR>'
+  end
+end, { expr = true, noremap = true })
+
 -- Delete both brackets if they're next to one another
 vim.keymap.set('i', '<BS>', function()
   local col = vim.fn.col('.')
