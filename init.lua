@@ -1,4 +1,4 @@
--- This is a minimal config. Adopted from https://github.com/radleylewis/nvim-lite, and changed some things for windows
+-- This is a minimal config. Adopted from https://github.com/radleylewis/nvim-lite
 
 vim.cmd.colorscheme("evening")
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
