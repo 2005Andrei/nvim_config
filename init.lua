@@ -92,6 +92,8 @@ vim.keymap.set('i', '[', '[]<Left>', { noremap = true })
 vim.keymap.set('i', '{', '{}<Left>', { noremap = true })
 vim.keymap.set('i', '"', '""<Left>', { noremap = true })
 vim.keymap.set('i', "'", "''<Left>", { noremap = true })
+vim.keymap.set('i', "<", "<><Left>", { noremap = true })
+
 
 -- Annoyance fix for {}
 vim.keymap.set('i', '<CR>', function()
@@ -122,7 +124,8 @@ vim.keymap.set('i', '<BS>', function()
     ['['] = ']',
     ['{'] = '}',
     ['"'] = '"',
-    ["'"] = "'"
+    ["'"] = "'",
+    ["<"] = ">"
   }
   
   if pairs[prev_char] == next_char then
@@ -131,6 +134,37 @@ vim.keymap.set('i', '<BS>', function()
     return '<BS>'
   end
 end, { expr = true, noremap = true })
+
+
+-- Remaping ctrl e and ctrl y to <leader> j, k
+local function setup_scroll_repeat()
+  vim.keymap.set('n', '<leader>j', function()
+    vim.cmd('normal! 1<C-e>')
+    vim.keymap.set('n', 'j', '<C-e>', { buffer = true, noremap = true, silent = true })
+    vim.keymap.set('n', 'k', '<C-y>', { buffer = true, noremap = true, silent = true })
+    
+    vim.defer_fn(function()
+      pcall(vim.keymap.del, 'n', 'j', { buffer = true })
+      pcall(vim.keymap.del, 'n', 'k', { buffer = true })
+    end, 2000)
+  end, { noremap = true, silent = true, desc = 'Scroll down (repeatable)' })
+  
+  vim.keymap.set('n', '<leader>k', function()
+    vim.cmd('normal! 1<C-y>')
+    vim.keymap.set('n', 'k', '<C-y>', { buffer = true, noremap = true, silent = true })
+    vim.keymap.set('n', 'j', '<C-e>', { buffer = true, noremap = true, silent = true })
+    
+    vim.defer_fn(function()
+      pcall(vim.keymap.del, 'n', 'k', { buffer = true })
+      pcall(vim.keymap.del, 'n', 'j', { buffer = true })
+    end, 2000)
+  end, { noremap = true, silent = true, desc = 'Scroll up (repeatable)' })
+end
+
+setup_scroll_repeat()
+
+
+
 
 -- Y to EOL
 vim.keymap.set("n", "Y", "y$", { desc = "Yank to end of line" })
@@ -145,7 +179,8 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Half page up (centered)" })
 vim.keymap.set("x", "<leader>p", '"_dP', { desc = "Paste without yanking" })
 
 -- Delete without yanking
-vim.keymap.set({ "n", "v" }, "<leader>d", '"_d', { desc = "Delete without yanking" })
+vim.keymap.set({ "n", "v" }, "d", '"_d', { desc = "Delete without yanking" })
+
 
 -- Buffer navigation
 vim.keymap.set("n", "<leader>bn", ":bnext<CR>", { desc = "Next buffer" })
