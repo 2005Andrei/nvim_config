@@ -92,7 +92,26 @@ vim.keymap.set('i', '[', '[]<Left>', { noremap = true })
 vim.keymap.set('i', '{', '{}<Left>', { noremap = true })
 vim.keymap.set('i', '"', '""<Left>', { noremap = true })
 vim.keymap.set('i', "'", "''<Left>", { noremap = true })
-vim.keymap.set('i', "<", "<><Left>", { noremap = true })
+
+-- special <> behavior
+vim.keymap.set('i', "<", function()
+  local line = vim.api.nvim_get_current_line()
+  local col = vim.api.nvim_win_get_cursor(0)[2]
+  local before_cursor = line:sub(1, col)
+  
+  local filetype = vim.bo.filetype
+  if filetype == 'cpp' or filetype == 'c' then
+    if before_cursor:match('%s*cin%s*$') then
+      return '<'
+    end
+    
+    if before_cursor:match('[<>]%s*$') then
+      return '<'
+    end
+  end
+  
+  return '<><Left>'
+end, { expr = true, noremap = true })
 
 
 -- Annoyance fix for {}
