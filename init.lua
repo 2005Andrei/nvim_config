@@ -101,7 +101,7 @@ vim.keymap.set('i', "<", function()
   
   local filetype = vim.bo.filetype
   if filetype == 'cpp' or filetype == 'c' then
-    if before_cursor:match('%s*cin%s*$') then
+    if before_cursor:match('%s*cin%s*$') or before_cursor:match('%s*cout%s*$')  then
       return '<'
     end
     
