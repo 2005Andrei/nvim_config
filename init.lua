@@ -1,5 +1,3 @@
--- This is a minimal config. Adopted from https://github.com/radleylewis/nvim-lite
-
 vim.cmd.colorscheme("evening")
 vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 vim.api.nvim_set_hl(0, "NormalNC", { bg = "none" })
@@ -7,7 +5,7 @@ vim.api.nvim_set_hl(0, "EndOfBuffer", {  bg = "none" })
 
 -- Basic settings
 vim.opt.number = true                              -- Line numbers
-vim.opt.relativenumber = false                      -- Relative line numbers
+vim.opt.relativenumber = true                      -- Relative line numbers
 vim.opt.cursorline = true                          -- Highlight current line
 vim.opt.wrap = false                               -- Don't wrap lines
 vim.opt.scrolloff = 10                             -- Keep 10 lines above/below cursor 
@@ -81,10 +79,7 @@ vim.opt.splitright = true                          -- Vertical splits go right
 
 -- Key mappings
 vim.g.mapleader = " "                              -- Set leader key to space
-vim.g.maplocalleader = " "                         -- Set local leader key (NEW)
-
--- Normal mode mappings
-vim.keymap.set("n", "<leader>c", ":nohlsearch<CR>", { desc = "Clear search highlights" })
+-- No local leader at the moment
 
 -- Auto-close brackets, braces, and quotes
 vim.keymap.set('i', '(', '()<Left>', { noremap = true })
@@ -93,7 +88,7 @@ vim.keymap.set('i', '{', '{}<Left>', { noremap = true })
 vim.keymap.set('i', '"', '""<Left>', { noremap = true })
 vim.keymap.set('i', "'", "''<Left>", { noremap = true })
 
--- special <> behavior
+-- Custom behaviour for < in cpp and c files
 vim.keymap.set('i', "<", function()
   local line = vim.api.nvim_get_current_line()
   local col = vim.api.nvim_win_get_cursor(0)[2]
@@ -101,11 +96,9 @@ vim.keymap.set('i', "<", function()
   
   local filetype = vim.bo.filetype
   if filetype == 'cpp' or filetype == 'c' then
-    if before_cursor:match('%s*cin%s*$') or before_cursor:match('%s*cout%s*$')  then
-      return '<'
-    end
-    
-    if before_cursor:match('[<>]%s*$') then
+    if before_cursor:match('^%s*#include%s+$') then
+      return '<><Left>'
+    else
       return '<'
     end
   end
@@ -155,35 +148,7 @@ vim.keymap.set('i', '<BS>', function()
 end, { expr = true, noremap = true })
 
 
--- Remaping ctrl e and ctrl y to <leader> j, k
-local function setup_scroll_repeat()
-  vim.keymap.set('n', '<leader>j', function()
-    vim.cmd('normal! 1<C-e>')
-    vim.keymap.set('n', 'j', '<C-e>', { buffer = true, noremap = true, silent = true })
-    vim.keymap.set('n', 'k', '<C-y>', { buffer = true, noremap = true, silent = true })
-    
-    vim.defer_fn(function()
-      pcall(vim.keymap.del, 'n', 'j', { buffer = true })
-      pcall(vim.keymap.del, 'n', 'k', { buffer = true })
-    end, 2000)
-  end, { noremap = true, silent = true, desc = 'Scroll down (repeatable)' })
-  
-  vim.keymap.set('n', '<leader>k', function()
-    vim.cmd('normal! 1<C-y>')
-    vim.keymap.set('n', 'k', '<C-y>', { buffer = true, noremap = true, silent = true })
-    vim.keymap.set('n', 'j', '<C-e>', { buffer = true, noremap = true, silent = true })
-    
-    vim.defer_fn(function()
-      pcall(vim.keymap.del, 'n', 'k', { buffer = true })
-      pcall(vim.keymap.del, 'n', 'j', { buffer = true })
-    end, 2000)
-  end, { noremap = true, silent = true, desc = 'Scroll up (repeatable)' })
-end
-
-setup_scroll_repeat()
-
-
-
+-- Remaping ctrl e and ctrl y to <leader> j, k - I deleted this part, maybe will add it again
 
 -- Y to EOL
 vim.keymap.set("n", "Y", "y$", { desc = "Yank to end of line" })
@@ -220,8 +185,8 @@ vim.keymap.set("n", "<C-Left>", ":vertical resize -2<CR>", { desc = "Decrease wi
 vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>", { desc = "Increase window width" })
 
 -- Move lines up/down
-vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
 vim.keymap.set("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })
+vim.keymap.set("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
 vim.keymap.set("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
 vim.keymap.set("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
 
@@ -233,8 +198,9 @@ vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 vim.keymap.set("n", "<leader>e", ":Explore<CR>", { desc = "Open file explorer" })
 vim.keymap.set("n", "<leader>ff", ":find ", { desc = "Find file" })
 
--- Better J behavior
+-- Inserting and Removing newlines
 vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines and keep cursor position" })
+vim.keymap.set("n", "K", "mzo<Esc>`z", { desc = "Insert new line below and keep cursor position" })
 
 -- Quick config editing
 vim.keymap.set("n", "<leader>rc", ":e ~/AppData/Local/nvim/init.lua<CR>", { desc = "Edit config" })
@@ -275,44 +241,6 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
--- Set filetype-specific settings
-vim.api.nvim_create_autocmd("FileType", {
-  group = augroup,
-  pattern = { "lua", "python" },
-  callback = function()
-    vim.opt_local.tabstop = 4
-    vim.opt_local.shiftwidth = 4
-  end,
-})
-
-vim.api.nvim_create_autocmd("FileType", {
-  group = augroup,
-  pattern = { "javascript", "typescript", "json", "html", "css" },
-  callback = function()
-    vim.opt_local.tabstop = 2
-    vim.opt_local.shiftwidth = 2
-  end,
-})
-
--- Auto-close terminal when process exits
-vim.api.nvim_create_autocmd("TermClose", {
-  group = augroup,
-  callback = function()
-    if vim.v.event.status == 0 then
-      vim.api.nvim_buf_delete(0, {})
-    end
-  end,
-})
-
--- Disable line numbers in terminal
-vim.api.nvim_create_autocmd("TermOpen", {
-  group = augroup,
-  callback = function()
-    vim.opt_local.number = false
-    vim.opt_local.relativenumber = false
-    vim.opt_local.signcolumn = "no"
-  end,
-})
 
 -- Auto-resize splits when window is resized
 vim.api.nvim_create_autocmd("VimResized", {
@@ -321,222 +249,3 @@ vim.api.nvim_create_autocmd("VimResized", {
     vim.cmd("tabdo wincmd =")
   end,
 })
-
--- Create directories when saving files
-vim.api.nvim_create_autocmd("BufWritePre", {
-  group = augroup,
-  callback = function()
-    local dir = vim.fn.expand('<afile>:p:h')
-    if vim.fn.isdirectory(dir) == 0 then
-      vim.fn.mkdir(dir, 'p')
-    end
-  end,
-})
-
--- Command-line completion
-vim.opt.wildmenu = true
-vim.opt.wildmode = "longest:full,full"
-vim.opt.wildignore:append({ "*.o", "*.obj", "*.pyc", "*.class", "*.jar" })
-
--- Better diff options
-vim.opt.diffopt:append("linematch:60")
-
--- Performance improvements
-vim.opt.redrawtime = 10000
-vim.opt.maxmempattern = 20000
-
--- Create undo directory if it doesn't exist
--- local undodir = vim.fn.expand("~/.vim/undodir")
--- if vim.fn.isdirectory(undodir) == 0 then
---  vim.fn.mkdir(undodir, "p")
--- end
-
--- ============================================================================
--- FLOATING TERMINAL
--- ============================================================================
-
--- terminal
-local terminal_state = { buf = nil, win = nil, is_open = false }
-
-
-local function FloatingTerminal()
-  if terminal_state.is_open and terminal_state.win and vim.api.nvim_win_is_valid(terminal_state.win) then
-    vim.api.nvim_win_close(terminal_state.win, false)
-    terminal_state.is_open = false
-    return
-  end
-
-  -- Always create a new buffer for the terminal
-  terminal_state.buf = vim.api.nvim_create_buf(false, true)
-  vim.api.nvim_buf_set_option(terminal_state.buf, 'bufhidden', 'wipe')
-
-  local width = math.floor(vim.o.columns * 0.8)
-  local height = math.floor(vim.o.lines * 0.8)
-  local row = math.floor((vim.o.lines - height) / 2)
-  local col = math.floor((vim.o.columns - width) / 2)
-
-  terminal_state.win = vim.api.nvim_open_win(terminal_state.buf, true, {
-    relative = 'editor', width = width, height = height, row = row, col = col,
-    style = 'minimal', border = 'rounded'
-  })
-
-  vim.api.nvim_win_set_option(terminal_state.win, 'winblend', 0)
-  vim.api.nvim_win_set_option(terminal_state.win, 'winhighlight',
-    'Normal:FloatingTermNormal,FloatBorder:FloatingTermBorder')
-  vim.api.nvim_set_hl(0, "FloatingTermNormal", { bg = "none" })
-  vim.api.nvim_set_hl(0, "FloatingTermBorder", { bg = "none" })
-
-  local cmd = {
-    'powershell.exe', '-NoExit', '-ExecutionPolicy', 'Bypass', '-Command',
-    [[& { $env:Path = [System.Environment]::GetEnvironmentVariable("Path","User") + ";" + [System.Environment]::GetEnvironmentVariable("Path","Machine") }]]
-  }
-
-  -- Start the terminal process
-  vim.fn.termopen(cmd, {
-    on_exit = function()
-      -- Clean up when the terminal process exits
-      terminal_state.is_open = false
-    end
-  })
-  
-  terminal_state.is_open = true
-  vim.cmd("startinsert")
-end
-
-vim.keymap.set("n", "<leader>t", FloatingTerminal, { desc = "Toggle floating terminal" })
-vim.keymap.set("t", "<Esc>", function()
-  if terminal_state.is_open and terminal_state.win and vim.api.nvim_win_is_valid(terminal_state.win) then 
-    vim.api.nvim_win_close(terminal_state.win, false) 
-    terminal_state.is_open = false 
-  end
-end, { desc = "Close terminal" })
-
-
--- ============================================================================
--- STATUSLINE
--- ============================================================================
-
-vim.cmd([[
-  highlight StatusLine guibg=#1e1e2e guifg=#cdd6f4
-  highlight StatusLineNC guibg=#181825 guifg=#6c7086
-]])
-
--- Or for specific colorscheme integration
-vim.api.nvim_set_hl(0, 'StatusLine', { bg = '#1e1e2e', fg = '#cdd6f4', bold = true })
-vim.api.nvim_set_hl(0, 'StatusLineNC', { bg = '#181825', fg = '#6c7086' })
-
-
--- Git branch function
-local function git_branch()
-  local branch = vim.fn.systemlist("git rev-parse --abbrev-ref HEAD 2>nul")[1]
-  if branch and branch ~= "" and not branch:match("fatal") then
-    return " " .. branch .. " "
-  end
-  return ""
-end
-
--- File type with icon
-local function file_type()
-  local ft = vim.bo.filetype
-  local icons = {
-    lua = "[LUA]",
-    python = "[PY]",
-    javascript = "[JS]",
-    html = "[HTML]",
-    css = "[CSS]",
-    json = "[JSON]",
-    markdown = "[MD]",
-    vim = "[VIM]",
-    sh = "[SH]",
-  }
-
-  if ft == "" then
-    return "  "
-  end
-
-  return (icons[ft] or ft)
-end
-
--- Word count for text files
-local function word_count()
-  local ft = vim.bo.filetype
-  if ft == "markdown" or ft == "text" or ft == "tex" then
-    local words = vim.fn.wordcount().words
-    return "  " .. words .. " words "
-  end
-  return ""
-end
-
--- File size
-local function file_size()
-  local size = vim.fn.getfsize(vim.fn.expand('%'))
-  if size < 0 then return "" end
-  if size < 1024 then
-    return size .. "B "
-  elseif size < 1024 * 1024 then
-    return string.format("%.1fK", size / 1024)
-  else
-    return string.format("%.1fM", size / 1024 / 1024)
-  end
-end
-
--- Mode indicators with icons
-local function mode_icon()
-  local mode = vim.fn.mode()
-  local modes = {
-    n = "NORMAL",
-    i = "INSERT",
-    v = "VISUAL",
-    V = "V-LINE",
-    ["\22"] = "V-BLOCK",  -- Ctrl-V
-    c = "COMMAND",
-    s = "SELECT",
-    S = "S-LINE",
-    ["\19"] = "S-BLOCK",  -- Ctrl-S
-    R = "REPLACE",
-    r = "REPLACE",
-    ["!"] = "SHELL",
-    t = "TERMINAL"
-  }
-  return modes[mode] or "  " .. mode:upper()
-end
-
-_G.mode_icon = mode_icon
-_G.git_branch = git_branch
-_G.file_type = file_type
-_G.file_size = file_size
-
-vim.cmd([[
-  highlight StatusLineBold gui=bold cterm=bold
-]])
-
--- Function to change statusline based on window focus
-local function setup_dynamic_statusline()
-  vim.api.nvim_create_autocmd({"WinEnter", "BufEnter"}, {
-    callback = function()
-    vim.opt_local.statusline = table.concat {
-      "  ",
-      "%#StatusLineBold#",
-      "%{v:lua.mode_icon()}",
-      "%#StatusLine#",
-      " │ %f %h%m%r",
-      "%{v:lua.git_branch()}",
-      " │ ",
-      "%{v:lua.file_type()}",
-      " | ",
-      "%{v:lua.file_size()}",
-      "%=",                     -- Right-align everything after this
-      "%l:%c  %P ",             -- Line:Column and Percentage
-    }
-    end
-  })
-  vim.api.nvim_set_hl(0, "StatusLineBold", { bold = true })
-
-  vim.api.nvim_create_autocmd({"WinLeave", "BufLeave"}, {
-    callback = function()
-      vim.opt_local.statusline = "  %f %h%m%r │ %{v:lua.file_type()} | %=  %l:%c   %P "
-    end
-  })
-end
-
-setup_dynamic_statusline()
