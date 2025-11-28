@@ -39,9 +39,8 @@ vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- Inserting and Removing newlines
-vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines and keep cursor position" })
-vim.keymap.set("n", "K", "mzo<Esc>`z", { desc = "Insert new line below and keep cursor position" })
+-- vim.keymap.set("n", "J", "mzJ`z", { desc = "Join lines and keep cursor position" })
+-- vim.keymap.set("n", "K", "mzo<Esc>`z", { desc = "Insert new line below and keep cursor position" })
 
 -- Enable completion triggered by <c-x><c-o>
 vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
-
