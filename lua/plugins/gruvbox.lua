@@ -1,15 +1,16 @@
 return {
-  "folke/tokyonight.nvim",
-  lazy = false, -- load immediately
+  "ellisonleao/gruvbox.nvim",
+  lazy = false,
   priority = 1000,
   config = function()
-    require("tokyonight").setup({
-      style = "night",
-      transparent = true,
+    require("gruvbox").setup({
+      transparent_mode = true,
       styles = {
         comments = { italic = true },
         keywords = { italic = true },
       },
     })
-  end,
+
+    vim.cmd.colorscheme("rose-pine")
+  end
 }
