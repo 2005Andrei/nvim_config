@@ -7,9 +7,9 @@ vim.opt.scrolloff = 10        -- Keep 10 lines above/below cursor
 vim.opt.sidescrolloff = 8     -- Keep 8 columns left/right of cursor
 
 -- Indentation
-vim.opt.tabstop = 2        -- Tab width
-vim.opt.shiftwidth = 2     -- Indent width
-vim.opt.softtabstop = 2    -- Soft tab stop
+vim.opt.tabstop = 4        -- Tab width
+vim.opt.shiftwidth = 4     -- Indent width
+vim.opt.softtabstop = 4    -- Soft tab stop
 vim.opt.expandtab = true   -- Use spaces instead of tabs
 vim.opt.smartindent = true -- Smart auto-indenting
 vim.opt.autoindent = true  -- Copy indent from current line
@@ -24,7 +24,7 @@ vim.opt.incsearch = true  -- Show matches as you type
 vim.opt.termguicolors = true                      -- Enable 24-bit colors
 vim.opt.signcolumn = "yes"                        -- Always show sign column
 vim.opt.showmatch = true                          -- Highlight matching brackets
-vim.opt.matchtime = 2                             -- How long to show matching bracket
+vim.opt.matchtime = 3                             -- How long to show matching bracket
 vim.opt.cmdheight = 1                             -- Command line height
 vim.opt.completeopt = "menuone,noinsert,noselect" -- Completion options
 vim.opt.showmode = false                          -- Don't show mode in command line
@@ -54,3 +54,11 @@ vim.keymap.set('n', ']d', vim.diagnostic.goto_next, {})
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {})
 -- List all diagnostics
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, {})
+
+-- file types for avalonia
+vim.filetype.add({
+  extension = {
+    xaml = "xml",
+    axaml = "xml",
+  }
+})

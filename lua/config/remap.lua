@@ -44,3 +44,6 @@ vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- Enable completion triggered by <c-x><c-o>
 vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
+
+-- Delete without yanking
+vim.keymap.set("x", "ff", '"_d')
