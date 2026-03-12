@@ -45,5 +45,15 @@ vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 -- Enable completion triggered by <c-x><c-o>
 vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
 
--- Delete without yanking
-vim.keymap.set("x", "ff", '"_d')
+-- typst open pdf, more info: https://myriad-dreamin.github.io/tinymist/frontend/neovim.html
+vim.api.nvim_create_user_command("OpenPdf", function()
+    local filepath = vim.api.nvim_buf_get_name(0)
+    if filepath:match("%.typ$") then
+        local pdf_path = filepath:gsub("%.typ$", ".pdf")
+        vim.system({ "xdg-open", pdf_path })
+    else
+        print("not typst dumb ahh")
+    end
+end, {})
+
+vim.keymap.set("n", "<leader>to", ":OpenPdf <CR>", { desc = "Open current file if it's typst" })
