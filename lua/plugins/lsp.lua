@@ -39,6 +39,7 @@ return {
                 "ts_ls",
                 "tailwindcss",
                 "tinymist",
+                "matlab_ls",
             },
             handlers = {
                 function(server_name)
