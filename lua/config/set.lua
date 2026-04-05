@@ -56,11 +56,12 @@ vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {})
 -- List all diagnostics
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, {})
 
--- file types for avalonia
+-- File Types
 vim.filetype.add({
     extension = {
         xaml = "xml",
         axaml = "xml",
-        typ = "typst"
-    }
+        typ = "typst",
+        qml = "qml"
+    },
 })

@@ -78,6 +78,14 @@ return {
             }
         })
 
+        require("lspconfig").qmlls.setup {
+            capabilities = capabilities,
+            cmd = { "qmlls6" },
+            on_attach = function(client, bufnr)
+                client.server_capabilities.semanticTokens = nil
+            end
+        }
+
         local cmp_select = { behavior = cmp.SelectBehavior.Select }
 
         cmp.setup({
