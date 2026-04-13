@@ -419,7 +419,17 @@ require("dashboard").setup({
 })
 
 require("nvim-autopairs").setup({})
-require("ibl").setup({})
+require("ibl").setup({
+    exclude = {
+        filetypes = {
+            "dashboard",
+            "neo-tree",
+            "trouble",
+            "lazy",
+            "mason",
+        },
+    },
+})
 require("mason").setup({})
 
 require("nvim-ts-autotag").setup({
