@@ -16,6 +16,8 @@ vim.pack.add({
     { src = "https://github.com/idossha/matlab.nvim" },
     { src = "https://github.com/catppuccin/nvim" },
     { src = "https://github.com/rebelot/kanagawa.nvim" },
+    { src = "https://github.com/nvimdev/dashboard-nvim" },
+
 
     -- notifcations
     { src = "https://github.com/rcarriga/nvim-notify" },
@@ -156,7 +158,7 @@ require('lualine').setup {
 
 
 
-vim.cmd('colorscheme kanagawa')
+vim.cmd('colorscheme kanagawa-dragon')
 
 
 local telescope = require('telescope')
@@ -376,6 +378,39 @@ require("typst-preview").setup({
         ['tinymist'] = 'tinymist'
     }
 })
+
+require("dashboard").setup({
+    theme = 'hyper',
+    config = {
+        week_header = {
+            enable = true,
+        },
+        shortcut = {
+            { desc = '󰊳 Update', group = '@property', action = 'Lazy update', key = 'u' },
+            {
+                icon = ' ',
+                icon_hl = '@variable',
+                desc = 'Files',
+                group = 'Label',
+                action = 'Telescope find_files',
+                key = 'f',
+            },
+            {
+                desc = ' Apps',
+                group = 'DiagnosticHint',
+                action = 'Telescope app',
+                key = 'a',
+            },
+            {
+                desc = ' dotfiles',
+                group = 'Number',
+                action = 'Telescope dotfiles',
+                key = 'd',
+            },
+        },
+    },
+})
+
 require("nvim-autopairs").setup({})
 require("ibl").setup({})
 require("mason").setup({})
