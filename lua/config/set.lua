@@ -1,62 +1,102 @@
--- Basic settings
-vim.opt.number = true         -- Line numbers
-vim.opt.relativenumber = true -- Relative line numbers
-vim.opt.cursorline = true     -- Highlight current line
-vim.opt.wrap = false          -- Don't wrap lines
-vim.opt.scrolloff = 10        -- Keep 10 lines above/below cursor
-vim.opt.sidescrolloff = 8     -- Keep 8 columns left/right of cursor
-vim.opt.swapfile = false      -- I fucking hate swap files
+vim.g.mapleader = " "
+vim.opt.number = true
+vim.opt.relativenumber = true
+vim.opt.cursorline = true
+vim.opt.wrap = false
+vim.opt.scrolloff = 10
+vim.opt.sidescrolloff = 8
+vim.opt.swapfile = false
+vim.opt.ignorecase = true
+vim.g.loaded_netrw = 1
+vim.g.loadeed_netrwPlugin = 1
+vim.cmd([[set mouse=]])
 
--- Indentation
-vim.opt.tabstop = 4        -- Tab width
-vim.opt.shiftwidth = 4     -- Indent width
-vim.opt.softtabstop = 4    -- Soft tab stop
-vim.opt.expandtab = true   -- Use spaces instead of tabs
-vim.opt.smartindent = true -- Smart auto-indenting
-vim.opt.autoindent = true  -- Copy indent from current line
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+vim.opt.softtabstop = 4
+vim.opt.expandtab = true
+vim.opt.smartindent = true
+vim.opt.incsearch = true
 
--- Search settings
-vim.opt.ignorecase = true -- Case insensitive search
-vim.opt.smartcase = true  -- Case sensitive if uppercase in search
-vim.opt.hlsearch = false  -- Don't highlight search results
-vim.opt.incsearch = true  -- Show matches as you type
+vim.opt.termguicolors = true
+vim.opt.signcolumn = "yes"
+vim.opt.showmatch = true
+vim.opt.matchtime = 2
+vim.opt.cmdheight = 1
+vim.opt.completeopt = "menuone,noinsert,noselect"
+vim.opt.showmode = false
+vim.opt.pumheight = 10
+vim.opt.pumblend = 10
+vim.opt.winblend = 0
+vim.opt.concealcursor = ""
+vim.opt.lazyredraw = true
+vim.opt.synmaxcol = 200
+vim.opt.fillchars = { eob = " " } -- disable the ugly ~ at the end of buffers
 
--- Visual settings
-vim.opt.termguicolors = true                      -- Enable 24-bit colors
-vim.opt.signcolumn = "yes"                        -- Always show sign column
-vim.opt.showmatch = true                          -- Highlight matching brackets
-vim.opt.matchtime = 3                             -- How long to show matching bracket
-vim.opt.cmdheight = 1                             -- Command line height
-vim.opt.completeopt = "menuone,noinsert,noselect" -- Completion options
-vim.opt.showmode = false                          -- Don't show mode in command line
-vim.opt.pumheight = 10                            -- Popup menu height
-vim.opt.pumblend = 10                             -- Popup menu transparency
-vim.opt.winblend = 0                              -- Floating window transparency
-vim.opt.conceallevel = 0                          -- Don't hide markup
-vim.opt.concealcursor = ""                        -- Don't hide cursor line markup
-vim.opt.lazyredraw = true                         -- Don't redraw during macros
-vim.opt.synmaxcol = 200                           -- Syntax highlighting limit
-vim.opt.fillchars = { eob = " " }                 -- Disable the ugly ass ~ at the end of buffers
-
--- Cursor settings
 vim.opt.guicursor =
 "n-v-c:block,i-ci-ve:block-blinkwait700-blinkoff400-blinkon250,r-cr:hor20,o:hor50,a:Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
 
--- System clipboard
-vim.opt.clipboard = 'unnamedplus'
+-- vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
 
--- Hover
-vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
--- Line diagnostics
 vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, {})
--- Go to next diagnostic
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, {})
--- Go to previous diagnostic
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {})
--- List all diagnostics
 vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, {})
 
--- File Types
+-- primagen mappings
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection up" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selection down" })
+
+-- resize windowa
+vim.keymap.set("n", "<C-Up>", ":resize +2<CR>")
+vim.keymap.set("n", "<C-Down>", ":resize -2<CR>")
+vim.keymap.set("n", "<C-Left>", ":vertical resize -2<CR>")
+vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>")
+
+-- window navigation
+vim.keymap.set("n", "<C-h>", "<C-w>h")
+vim.keymap.set("n", "<C-j>", "<C-w>j")
+vim.keymap.set("n", "<C-k>", "<C-w>k")
+vim.keymap.set("n", "<C-l>", "<C-w>l")
+
+
+-- not lose selection after indenting
+vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
+
+-- more clipboard keymaps
+local opts = { noremap = true, silent = true }
+local modes = { "n", "v", "x" }
+vim.keymap.set(modes, "yag", ":%y<CR>", opts)
+vim.keymap.set(modes, "vag", "ggVG", opts)
+vim.keymap.set(modes, "gl", "$", { desc = "jump to the end of line" })
+vim.keymap.set(modes, "n", "nzzzv")
+vim.keymap.set(modes, "N", "Nzzzv")
+vim.keymap.set({ "n", "v" }, "<ESC>", "<CMD>nohlsearch<CR><ESC>", { desc = "Clear highlights and escape" })
+vim.keymap.set(modes, "<leader>r", ":so<CR>", { desc = "reload config" })
+vim.keymap.set(modes, "<leader>R", ":restart<CR>", { desc = "restart nvim" })
+vim.keymap.set(modes, "<C-y>", '"+y', { desc = "system clipboard yank" })
+vim.keymap.set(modes, "<C-p>", '"*p', { desc = "system clipboard put" })
+
+vim.keymap.set({ "n" }, "<leader>w", "<Cmd>:w<CR>", { desc = "write" })
+vim.keymap.set({ "n" }, "<leader>q", "<Cmd>:quit<CR>", { desc = "quit" })
+vim.keymap.set({ "n" }, "<leader>W", "<Cmd>:wa<CR>", { desc = "write all" })
+vim.keymap.set({ "n" }, "<leader>Q", "<Cmd>:wqa<CR>", { desc = "write quit all" })
+
+vim.keymap.set("n", "<C-e>", function()
+    vim.system({ "xdg-open", "." })
+end, { desc = "open current folder in file explorer" })
+
+-- vim.keymap.set("n", "<leader>sh", builtin.help_tags)
+-- vim.keymap.set("n", "<leader>sm", builtin.man_pages)
+-- vim.keymap.set({ "n" }, "<leader>sr", builtin.lsp_references)
+-- vim.keymap.set({ "n" }, "<leader>sd", builtin.Diagnostics)
+
+for i = 1, 8 do
+	vim.keymap.set({ "n", "t" }, "<leader>" .. i, ":buffer " .. i .. "<CR>")
+end
+
+-- file types
 vim.filetype.add({
     extension = {
         xaml = "xml",
@@ -64,4 +104,41 @@ vim.filetype.add({
         typ = "typst",
         qml = "qml"
     },
+})
+
+vim.api.nvim_create_user_command("OpendPdf", function()
+	local filepath = vim.api.nvim_buf_get_name(0)
+	if filepath:match("%.typ$") then
+		local pdf_path = filepath:gsub("%.typ$", ".pdf")
+		vim.system({ "xdg-open", pdf_path })
+	else
+		print("not typst")
+	end
+end, {})
+
+vim.keymap.set("n", "<leader>to", ":OpendPdf <CR>", { desc = "Open current file if it's typst" })
+
+vim.api.nvim_create_augroup("TypstCompileOnType", { clear = true })
+
+vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
+    group = "TypstCompileOnType",
+    pattern = "*.typ",
+    callback = function()
+        local filepath = vim.fn.expand("%:p")
+        local pdf_path = filepath:gsub("%.typ$", ".pdf")
+        
+        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
+        local buffer_content = table.concat(lines, "\n")
+        
+        local file_dir = vim.fn.expand("%:p:h")
+        
+        vim.system({
+            "typst", "compile",
+            "--root", file_dir,
+            "-",
+            pdf_path
+        }, {
+            stdin = buffer_content
+        })
+    end,
 })
