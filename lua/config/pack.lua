@@ -82,6 +82,13 @@ require('kanagawa').setup({
     overrides = function(colors)
         local theme = colors.theme
         return {
+            TabLine = { bg = "none" },
+            TabLineFill = { bg = "none" },
+            TabLineSel = { bg = "none" },
+
+            BufferLineFill = { bg = "none" },
+            BufferLineBackground = { bg = "none" },
+
             LineNr = { bg = "none" },
             CursorLineNr = { bg = "none" },
             SignColumn = { bg = "none" },
@@ -448,13 +455,20 @@ vim.api.nvim_create_autocmd('LspAttach', {
     callback = function(args)
         local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
         if client:supports_method('textDocument/completion') then
-            -- Optional: trigger autocompletion on EVERY keypress. May be slow!
             local chars = {}; for i = 32, 126 do table.insert(chars, string.char(i)) end
             client.server_capabilities.completionProvider.triggerCharacters = chars
             vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
         end
+
+        local opts = { buffer = args.buf, desc = "LSP Go to definition" }
+        vim.keymap.set('n', 'gd', require('telescope.builtin').lsp_definitions, opts)
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, { buffer = args.buf, desc = "go to definition" })
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, { buffer = args.buf, desc = "hover docs" })
+        vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, { buffer = args.buf, desc = "rename symbol" })
+        vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, { buffer = args.buf, desc = "code action" })
     end,
 })
+
 
 vim.lsp.enable({
     "lua_ls", "cssls", "tinymist", "clangd", "ruff", "tailwindcss", "ts_ls", "pyright", "matlab_ls"
