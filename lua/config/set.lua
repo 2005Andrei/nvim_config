@@ -23,7 +23,7 @@ vim.opt.signcolumn = "yes"
 vim.opt.showmatch = true
 vim.opt.matchtime = 2
 vim.opt.cmdheight = 1
-vim.opt.completeopt = "menuone,noinsert,noselect"
+vim.opt.completeopt = { "menu", "menuone", "noselect" } -- "menuone,noinsert,noselect"
 vim.opt.showmode = false
 vim.opt.pumheight = 10
 vim.opt.pumblend = 10
@@ -34,14 +34,14 @@ vim.opt.synmaxcol = 200
 vim.opt.fillchars = { eob = " " } -- disable the ugly ~ at the end of buffers
 
 vim.opt.guicursor =
-"n-v-c:block,i-ci-ve:block-blinkwait700-blinkoff400-blinkon250,r-cr:hor20,o:hor50,a:Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
+	"n-v-c:block,i-ci-ve:block-blinkwait700-blinkoff400-blinkon250,r-cr:hor20,o:hor50,a:Cursor/lCursor,sm:block-blinkwait175-blinkoff150-blinkon175"
 
 -- vim.keymap.set('n', 'K', vim.lsp.buf.hover, {})
 
-vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, {})
-vim.keymap.set('n', ']d', vim.diagnostic.goto_next, {})
-vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, {})
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, {})
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {})
+vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {})
+vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {})
+vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, {})
 
 -- primagen mappings
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection up" })
@@ -58,7 +58,6 @@ vim.keymap.set("n", "<C-h>", "<C-w>h")
 vim.keymap.set("n", "<C-j>", "<C-w>j")
 vim.keymap.set("n", "<C-k>", "<C-w>k")
 vim.keymap.set("n", "<C-l>", "<C-w>l")
-
 
 -- not lose selection after indenting
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
@@ -84,7 +83,7 @@ vim.keymap.set({ "n" }, "<leader>W", "<Cmd>:wa<CR>", { desc = "write all" })
 vim.keymap.set({ "n" }, "<leader>Q", "<Cmd>:wqa<CR>", { desc = "write quit all" })
 
 vim.keymap.set("n", "<C-e>", function()
-    vim.system({ "xdg-open", "." })
+	vim.system({ "xdg-open", "." })
 end, { desc = "open current folder in file explorer" })
 
 -- vim.keymap.set("n", "<leader>sh", builtin.help_tags)
@@ -93,17 +92,17 @@ end, { desc = "open current folder in file explorer" })
 -- vim.keymap.set({ "n" }, "<leader>sd", builtin.Diagnostics)
 
 for i = 1, 8 do
-	vim.keymap.set({ "n", "t" }, "<leader>" .. i, ":buffer " .. i .. "<CR>")
+	vim.keymap.set({ "n", "t" }, "<leader>" .. i, "<Cmd>BufferLineGoToBuffer " .. i .. "<CR>")
 end
 
 -- file types
 vim.filetype.add({
-    extension = {
-        xaml = "xml",
-        axaml = "xml",
-        typ = "typst",
-        qml = "qml"
-    },
+	extension = {
+		xaml = "xml",
+		axaml = "xml",
+		typ = "typst",
+		qml = "qml",
+	},
 })
 
 vim.api.nvim_create_user_command("OpendPdf", function()
@@ -118,27 +117,16 @@ end, {})
 
 vim.keymap.set("n", "<leader>to", ":OpendPdf <CR>", { desc = "Open current file if it's typst" })
 
-vim.api.nvim_create_augroup("TypstCompileOnType", { clear = true })
+vim.keymap.set("i", "<Tab>", function()
+	if vim.fn.pumvisible() == 1 then
+		local selected = vim.fn.complete_info({ "selected" }).selected
 
-vim.api.nvim_create_autocmd({ "TextChanged", "TextChangedI" }, {
-    group = "TypstCompileOnType",
-    pattern = "*.typ",
-    callback = function()
-        local filepath = vim.fn.expand("%:p")
-        local pdf_path = filepath:gsub("%.typ$", ".pdf")
-        
-        local lines = vim.api.nvim_buf_get_lines(0, 0, -1, false)
-        local buffer_content = table.concat(lines, "\n")
-        
-        local file_dir = vim.fn.expand("%:p:h")
-        
-        vim.system({
-            "typst", "compile",
-            "--root", file_dir,
-            "-",
-            pdf_path
-        }, {
-            stdin = buffer_content
-        })
-    end,
-})
+		if selected == -1 then
+			return "<C-n><C-y>"
+		else
+			return "<C-y>"
+		end
+	else
+		return "<Tab>"
+	end
+end, { expr = true, replace_keycodes = true, desc = "Accept completion with Tab" })
