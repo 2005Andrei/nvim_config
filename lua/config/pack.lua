@@ -66,6 +66,28 @@ vim.keymap.set("n", "<leader>b", function()
 	})
 end, { desc = "list buffers" })
 
+-- :lua vim.print(vim.fn.api_info().types)
+vim.keymap.set("n", "<leader>c", function()
+	local buffer = vim.api.nvim_exec2("reg", { output = true })
+	local clean_buffer = {}
+
+	for str in string.gmatch(buffer.output, "[^\r\n]+") do
+		if not string.match(str, "^%-%-%-") then
+			local squeezed = string.gsub(str, "%s+", " ")
+
+			if string.len(squeezed) < 30 then
+				table.insert(clean_buffer, squeezed)
+			else
+				table.insert(clean_buffer, string.sub(squeezed, 1, 30) .. "...")
+			end
+		end
+	end
+
+	vim.notify(clean_buffer, "utility", {
+		title = "clipboard",
+	})
+end, { desc = "Show clipboard a bit nicer" })
+
 require("vague").setup({
 	transparent = true,
 	bold = false,
