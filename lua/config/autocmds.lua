@@ -4,12 +4,11 @@ vim.keymap.set("n", "<leader>pa", function()
 	print("file: ", path)
 end)
 
--- has lag for some reason
--- vim.api.nvim_create_autocmd("TextYankPost", {
--- 	callback = function()
--- 		vim.hl.on_yank()
--- 	end,
--- })
+vim.api.nvim_create_autocmd("TextYankPost", {
+	callback = function()
+		vim.hl.on_yank()
+	end,
+})
 
 vim.api.nvim_create_augroup("TypstCompileOnType", { clear = true })
 
