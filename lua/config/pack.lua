@@ -457,6 +457,7 @@ require("conform").setup({
 	formatters_by_ft = {
 		lua = { "stylua" },
 		c = { "clang-format" },
+		cs = { "csharpier" },
 		cpp = { "clang-format" },
 		javascript = { "prettier" },
 		typescript = { "prettier" },
@@ -470,6 +471,8 @@ require("conform").setup({
 	},
 })
 
+vim.treesitter.language.register("c_sharp", "cs")
+
 vim.lsp.enable({
 	"lua_ls",
 	"cssls",
@@ -480,6 +483,7 @@ vim.lsp.enable({
 	"ts_ls",
 	"pyright",
 	"matlab_ls",
+	"csharp_ls",
 })
 
 vim.api.nvim_create_autocmd("LspAttach", {

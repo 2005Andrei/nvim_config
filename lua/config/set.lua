@@ -75,7 +75,8 @@ vim.keymap.set({ "n", "v" }, "<ESC>", "<CMD>nohlsearch<CR><ESC>", { desc = "Clea
 vim.keymap.set(modes, "<leader>r", ":so<CR>", { desc = "reload config" })
 vim.keymap.set(modes, "<leader>R", ":restart<CR>", { desc = "restart nvim" })
 vim.keymap.set(modes, "<C-y>", '"+y', { desc = "system clipboard yank" })
-vim.keymap.set(modes, "<C-p>", '"*p', { desc = "system clipboard put" })
+vim.keymap.set(modes, "<C-p>", '"*p', { desc = "system clipboard put * register" })
+vim.keymap.set(modes, "<C-P>", '"+p', { desc = "system clipboard put + register" })
 
 vim.keymap.set({ "n" }, "<leader>w", "<Cmd>:w<CR>", { desc = "write" })
 vim.keymap.set({ "n" }, "<leader>q", "<Cmd>:quit<CR>", { desc = "quit" })
