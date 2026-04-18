@@ -116,6 +116,15 @@ require("kanagawa").setup({
 
 			NeoTreeNormal = { bg = "none" },
 			NeoTreeNormalNC = { bg = "none" },
+
+			-- ref: https://github.com/NvChad/base46/blob/v3.0/lua/base46/integrations/telescope.lua
+			TelescopeSelection = { bg = "none", fg = "beige" },
+			TelescopeBorder = { bg = "none", fg = "none" },
+			TelescopePromptPrefix = { bg = "none", fg = "NvimLightBlue" },
+			TelescopePreviewBorder = { bg = "none", fg = "beige" },
+			TelescopeResultsTitle = { bg = "none", fg = "NvimLightBlue" },
+			TelescopePreviewTitle = { bg = "none", fg = "NvimLightBlue" },
+			TelescopePromptTitle = { bg = "none", fg = "NvimLightBlue" },
 		}
 	end,
 })
@@ -182,29 +191,65 @@ require("lualine").setup({
 
 vim.cmd("colorscheme kanagawa-dragon")
 
+local h_pct = 0.90
+local w_pct = 0.80
 local telescope = require("telescope")
 telescope.setup({
 	defaults = {
 		preview = { treesitter = true },
 		color_devicons = true,
 		sorting_strategy = "ascending",
-		borderchars = {
-			"", -- top
-			"", -- right
-			"", -- bottom
-			"", -- left
-			"", -- top-left
-			"", -- top-right
-			"", -- bottom-right
-			"", -- bottom-left
-		},
+		-- borderchars = {
+		-- 	top
+		-- 	right
+		-- 	bottom
+		--  left
+		--  top-left
+		--  top-right
+		--  bottom-right
+		--  bottom-left
+		-- }
+
+		prompt_prefix = "❯ ",
+		selection_caret = "* ",
+		-- borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
+		borderchars = { " ", " ", " ", " ", " ", " ", " ", " " },
 		path_displays = { "smart" },
 		layout_config = {
 			height = 100,
-			width = 400,
+			width = 500,
 			prompt_position = "top",
 			preview_cutoff = 40,
 		},
+
+		layout_strategy = "flex",
+		-- layout_config = {
+		-- 	flex = { flip_columns = 100 },
+		-- 	horizontal = {
+		-- 		mirror = false,
+		-- 		prompt_position = "top",
+		-- 		width = function(_, cols, _)
+		-- 			return math.floor(cols * w_pct)
+		-- 		end,
+		-- 		height = function(_, _, rows)
+		-- 			return math.floor(rows * h_pct)
+		-- 		end,
+		-- 		preview_cutoff = 10,
+		-- 		preview_width = 0.5,
+		-- 	},
+		-- 	vertical = {
+		-- 		mirror = true,
+		-- 		prompt_position = "top",
+		-- 		width = function(_, cols, _)
+		-- 			return math.floor(cols * w_pct)
+		-- 		end,
+		-- 		height = function(_, _, rows)
+		-- 			return math.floor(rows * h_pct)
+		-- 		end,
+		-- 		preview_cutoff = 10,
+		-- 		preview_height = 0.5,
+		-- 	},
+		-- },
 	},
 })
 telescope.load_extension("ui-select")
@@ -216,7 +261,7 @@ vim.keymap.set("n", "<leader>fs", builtin.grep_string, { desc = "Telescope Find 
 vim.keymap.set("n", "<leader>fg", builtin.live_grep, { desc = "Telescope Live Grep" })
 vim.keymap.set("n", "<leader>fb", builtin.buffers, { desc = "Telescope Buffers" })
 vim.keymap.set("n", "<leader>fh", builtin.help_tags, { desc = "Telescope Help" })
-vim.keymap.set("n", "<leader>fm", builtin.man_pages, { desc = "Telescope Find Files" })
+vim.keymap.set("n", "<leader>fm", builtin.man_pages, { desc = "Telescope Man Pages" })
 vim.keymap.set("n", "<leader>fe", "<Cmd>Telescope env<CR>", { desc = "env vars" })
 vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "diagnostics" })
 vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "keymaps" })
