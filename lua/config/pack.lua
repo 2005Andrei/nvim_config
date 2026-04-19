@@ -446,11 +446,9 @@ require("typst-preview").setup({
 require("dashboard").setup({
 	theme = "doom",
 	config = {
+		vertical_center = true,
+		horizontal_center = true,
 		header = {
-			"",
-			"",
-			"",
-			"",
 			"",
 			[[ ███▄    █     ▒█████      ██▓    ▄████▄     ▓█████  ]],
 			[[ ██ ▀█   █    ▒██▒  ██▒   ▓██▒   ▒██▀ ▀█     ▓█   ▀  ]],
@@ -503,15 +501,6 @@ require("dashboard").setup({
 				icon_hl = "Title",
 			},
 			{
-				action = "Lazy",
-				desc = " Plugin Manager",
-				icon = "󰒲 ",
-				key = "l",
-				key_hl = "Number",
-				desc_hl = "String",
-				icon_hl = "Title",
-			},
-			{
 				action = "qa",
 				desc = " Quit Neovim",
 				icon = " ",
@@ -523,7 +512,7 @@ require("dashboard").setup({
 		},
 		footer = {
 			"",
-			"Neovim loaded successfully",
+			"Neovim loaded",
 		},
 	},
 })
