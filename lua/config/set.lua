@@ -109,13 +109,14 @@ vim.filetype.add({
 -- open imgs, pngs I'll add more later
 vim.api.nvim_create_user_command("OpenFile", function()
 	local filepath = vim.api.nvim_buf_get_name(0)
-	if filepath:match("%.png") or filepath:match("%.jpg") then -- yeah I'll replace ts later, rn it'll make do
-		vim.system({ "xdg-open", filepath })
-	else
-		vim.notify("Not png/jpg", "utility", {
-			"Open file",
-		})
-	end
+	vim.system({ "xdg-open", filepath })
+	-- if filepath:match("%.png") or filepath:match("%.jpg") then -- yeah I'll replace ts later, rn it'll make do
+	-- 	vim.system({ "xdg-open", filepath })
+	-- else
+	-- 	vim.notify("Not png/jpg", "utility", {
+	-- 		"Open file",
+	-- 	})
+	-- end
 end, {})
 
 vim.keymap.set("n", "<leader>of", "<Cmd>OpenFile<Cr>", { desc = "Open current jpg/png" })
