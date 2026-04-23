@@ -119,7 +119,7 @@ vim.api.nvim_create_user_command("OpenFile", function()
 	-- end
 end, {})
 
-vim.keymap.set("n", "<leader>of", "<Cmd>OpenFile<Cr>", { desc = "Open current jpg/png" })
+vim.keymap.set("n", "<leader>fo", "<Cmd>OpenFile<Cr>", { desc = "Open current jpg/png" })
 
 vim.api.nvim_create_user_command("OpendPdf", function()
 	local filepath = vim.api.nvim_buf_get_name(0)
