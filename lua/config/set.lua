@@ -92,9 +92,22 @@ end, { desc = "open current folder in file explorer" })
 -- vim.keymap.set({ "n" }, "<leader>sr", builtin.lsp_references)
 -- vim.keymap.set({ "n" }, "<leader>sd", builtin.Diagnostics)
 
-for i = 1, 8 do
+for i = 1, 9 do
 	vim.keymap.set({ "n", "t" }, "<leader>" .. i, "<Cmd>BufferLineGoToBuffer " .. i .. "<CR>")
 end
+
+vim.keymap.set(
+	{ "n", "t" },
+	"<leader>bd",
+	"<Cmd>BufDel<Cr>",
+	{ desc = "Delete current buffer without modifying the rest" }
+)
+vim.keymap.set(
+	{ "n", "t" },
+	"<leader>bD",
+	"<Cmd>BufDelOthers<Cr>",
+	{ desc = "Delete other buffers than the current one" }
+)
 
 -- file types
 vim.filetype.add({

@@ -17,6 +17,7 @@ vim.pack.add({
 	{ src = "https://github.com/catppuccin/nvim" },
 	{ src = "https://github.com/rebelot/kanagawa.nvim" },
 	{ src = "https://github.com/nvimdev/dashboard-nvim" },
+	{ src = "https://github.com/ojroques/nvim-bufdel" },
 
 	-- notifcations
 	{ src = "https://github.com/rcarriga/nvim-notify" },
@@ -65,6 +66,11 @@ vim.keymap.set("n", "<leader>b", function()
 		title = "buffers",
 	})
 end, { desc = "list buffers" })
+
+require("bufdel").setup({
+	next = "tabs",
+	quit = true,
+})
 
 -- :lua vim.print(vim.fn.api_info().types)
 vim.keymap.set("n", "<leader>c", function()
@@ -225,33 +231,6 @@ telescope.setup({
 		},
 
 		layout_strategy = "flex",
-		-- layout_config = {
-		-- 	flex = { flip_columns = 100 },
-		-- 	horizontal = {
-		-- 		mirror = false,
-		-- 		prompt_position = "top",
-		-- 		width = function(_, cols, _)
-		-- 			return math.floor(cols * w_pct)
-		-- 		end,
-		-- 		height = function(_, _, rows)
-		-- 			return math.floor(rows * h_pct)
-		-- 		end,
-		-- 		preview_cutoff = 10,
-		-- 		preview_width = 0.5,
-		-- 	},
-		-- 	vertical = {
-		-- 		mirror = true,
-		-- 		prompt_position = "top",
-		-- 		width = function(_, cols, _)
-		-- 			return math.floor(cols * w_pct)
-		-- 		end,
-		-- 		height = function(_, _, rows)
-		-- 			return math.floor(rows * h_pct)
-		-- 		end,
-		-- 		preview_cutoff = 10,
-		-- 		preview_height = 0.5,
-		-- 	},
-		-- },
 	},
 })
 telescope.load_extension("ui-select")
