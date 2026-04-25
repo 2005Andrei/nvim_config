@@ -98,13 +98,13 @@ end
 
 vim.keymap.set(
 	{ "n", "t" },
-	"<leader>bd",
+	"<leader>db",
 	"<Cmd>BufDel<Cr>",
 	{ desc = "Delete current buffer without modifying the rest" }
 )
 vim.keymap.set(
 	{ "n", "t" },
-	"<leader>bD",
+	"<leader>D",
 	"<Cmd>BufDelOthers<Cr>",
 	{ desc = "Delete other buffers than the current one" }
 )
