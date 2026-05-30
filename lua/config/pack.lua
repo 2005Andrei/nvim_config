@@ -558,12 +558,19 @@ require("conform").setup({
 		typescript = { "prettier" },
 		javascriptreact = { "prettier" },
 		typescriptreact = { "prettier" },
-		xml = { "xmlformat" },
+		xml = { "xmllint" },
 	},
 	format_on_save = {
 		lsp_fallback = true,
 		async = false,
-		timeout_ms = 500,
+		timeout_ms = 1000,
+	},
+	formatters = {
+		xmllint = {
+			env = {
+				XMLLINT_INDENT = "    ",
+			},
+		},
 	},
 })
 

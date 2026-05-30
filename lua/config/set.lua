@@ -84,6 +84,8 @@ vim.keymap.set({ "n" }, "<leader>q", "<Cmd>:quit<CR>", { desc = "quit" })
 vim.keymap.set({ "n" }, "<leader>W", "<Cmd>:wa<CR>", { desc = "write all" })
 vim.keymap.set({ "n" }, "<leader>Q", "<Cmd>:wqa<CR>", { desc = "write quit all" })
 
+vim.keymap.set({ "n" }, "<leader>s", "<Cmd>:vsp<CR>", { desc = "vertical split" })
+
 vim.keymap.set("n", "<C-e>", function()
 	vim.system({ "xdg-open", "." })
 end, { desc = "open current folder in file explorer" })
