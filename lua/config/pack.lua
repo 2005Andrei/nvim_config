@@ -35,6 +35,11 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
 	{ src = "https://github.com/LinArcX/telescope-env.nvim" },
 
+	-- dap
+	{ src = "https://github.com/mfussenegger/nvim-dap" },
+	{ src = "https://github.com/rcarriga/nvim-dap-ui" },
+	{ src = "https://github.com/nvim-neotest/nvim-nio" },
+
 	-- dependencies added as normal plugins
 	{ src = "https://github.com/3rd/image.nvim" },
 	{ src = "https://github.com/antosha417/nvim-lsp-file-operations" },
@@ -42,6 +47,7 @@ vim.pack.add({
 })
 
 require("notify").setup({})
+require("dapui").setup()
 vim.notify = require("notify")
 
 vim.keymap.set("n", "<leader>b", function()
@@ -552,6 +558,7 @@ require("conform").setup({
 		typescript = { "prettier" },
 		javascriptreact = { "prettier" },
 		typescriptreact = { "prettier" },
+		xml = { "xmlformat" },
 	},
 	format_on_save = {
 		lsp_fallback = true,
@@ -635,3 +642,48 @@ require("matlab").setup({
 	default_mappings = true,
 	minimal_notifications = true,
 })
+
+local dap = require("dap")
+local dapui = require("dapui")
+
+dapui.setup()
+
+dap.listeners.after.event_initialized["dapui_config"] = function()
+	dapui.open()
+end
+dap.listeners.before.event_terminated["dapui_config"] = function()
+	dapui.close()
+end
+dap.listeners.before.event_exited["dapui_config"] = function()
+	dapui.close()
+end
+
+dap.adapters.coreclr = {
+	type = "executable",
+	command = "/usr/bin/netcoredbg",
+	args = { "--interpreter=vscode" },
+}
+
+dap.configurations.cs = {
+	{
+		type = "coreclr",
+		name = "Launch - netcoredbg",
+		request = "launch",
+		program = function()
+			return vim.fn.input("Path to dll: ", vim.fn.getcwd() .. "/bin/Debug/net8.0/GestionarCont.dll", "file")
+		end,
+	},
+}
+
+vim.keymap.set("n", "<F5>", function()
+	require("dap").continue()
+end, { desc = "DAP Continue" })
+vim.keymap.set("n", "<F10>", function()
+	require("dap").step_over()
+end, { desc = "DAP Step Over" })
+vim.keymap.set("n", "<F1>", function()
+	require("dap").step_into()
+end, { desc = "DAP Step Into" })
+vim.keymap.set("n", "<F9>", function()
+	require("dap").toggle_breakpoint()
+end, { desc = "DAP Breakpoint" })

@@ -41,7 +41,7 @@ vim.opt.guicursor =
 vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, {})
 vim.keymap.set("n", "]d", vim.diagnostic.goto_next, {})
 vim.keymap.set("n", "[d", vim.diagnostic.goto_prev, {})
-vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, {})
+vim.keymap.set("n", "<leader>l", vim.diagnostic.setloclist, {})
 
 -- primagen mappings
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selection up" })
@@ -68,6 +68,7 @@ local opts = { noremap = true, silent = true }
 local modes = { "n", "v", "x" }
 vim.keymap.set(modes, "yag", ":%y<CR>", opts)
 vim.keymap.set(modes, "vag", "ggVG", opts)
+vim.keymap.set(modes, "vga", "VG", opts)
 vim.keymap.set(modes, "gl", "$", { desc = "jump to the end of line" })
 vim.keymap.set(modes, "n", "nzzzv")
 vim.keymap.set(modes, "N", "Nzzzv")
@@ -76,7 +77,7 @@ vim.keymap.set(modes, "<leader>r", ":so<CR>", { desc = "reload config" })
 vim.keymap.set(modes, "<leader>R", ":restart<CR>", { desc = "restart nvim" })
 vim.keymap.set(modes, "<C-y>", '"+y', { desc = "system clipboard yank" })
 vim.keymap.set(modes, "<C-p>", '"*p', { desc = "system clipboard put * register" })
-vim.keymap.set(modes, "<C-P>", '"+p', { desc = "system clipboard put + register" })
+-- vim.keymap.set(modes, "<C-P>", '"+p', { desc = "system clipboard put + register" })
 
 vim.keymap.set({ "n" }, "<leader>w", "<Cmd>:w<CR>", { desc = "write" })
 vim.keymap.set({ "n" }, "<leader>q", "<Cmd>:quit<CR>", { desc = "quit" })
@@ -104,9 +105,9 @@ vim.keymap.set(
 )
 vim.keymap.set(
 	{ "n", "t" },
-	"<leader>D",
+	"<leader>da",
 	"<Cmd>BufDelOthers<Cr>",
-	{ desc = "Delete other buffers than the current one" }
+	{ desc = "Delete all other buffers than the current one" }
 )
 
 -- file types
