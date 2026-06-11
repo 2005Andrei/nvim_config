@@ -142,9 +142,21 @@
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
     },
+    "popup.nvim": {
+      "rev": "b7404d35d5d3548a82149238289fa71f7f6de4ac",
+      "src": "https://github.com/nvim-lua/popup.nvim"
+    },
     "telescope-env.nvim": {
       "rev": "00a703cc7b713cdda0a981d88fddf3ce25502af5",
       "src": "https://github.com/LinArcX/telescope-env.nvim"
+    },
+    "telescope-media-files.nvim": {
+      "rev": "0826c7a730bc4d36068f7c85cf4c5b3fd9fb570a",
+      "src": "https://github.com/nvim-telescope/telescope-media-files.nvim"
+    },
+    "telescope-media.nvim": {
+      "rev": "40982db717e997094bc12fb419fc10db4cf2b6cc",
+      "src": "https://github.com/dharmx/telescope-media.nvim"
     },
     "telescope-ui-select.nvim": {
       "rev": "6e51d7da30bd139a6950adf2a47fda6df9fa06d2",

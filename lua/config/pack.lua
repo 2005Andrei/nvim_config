@@ -34,6 +34,7 @@ vim.pack.add({
 	{ src = "https://github.com/nvim-telescope/telescope.nvim", version = "0.1.8" },
 	{ src = "https://github.com/nvim-telescope/telescope-ui-select.nvim" },
 	{ src = "https://github.com/LinArcX/telescope-env.nvim" },
+	{ src = "https://github.com/nvim-lua/popup.nvim" },
 
 	-- dap
 	{ src = "https://github.com/mfussenegger/nvim-dap" },
@@ -59,7 +60,7 @@ vim.keymap.set("n", "<leader>b", function()
 			local path = vim.api.nvim_buf_get_name(buf_id)
 
 			if path == "" then
-				path = "[no name or sth]"
+				path = "[no name]"
 			else
 				path = vim.fn.fnamemodify(path, ":~:.")
 			end
@@ -205,8 +206,6 @@ require("lualine").setup({
 
 vim.cmd("colorscheme kanagawa-dragon")
 
-local h_pct = 0.90
-local w_pct = 0.80
 local telescope = require("telescope")
 telescope.setup({
 	defaults = {
@@ -629,13 +628,13 @@ vim.keymap.set("n", "<leader>e", function()
 	require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
 end, { desc = "neotree explorer" })
 
-vim.keymap.set(modes, "<leader>o", function()
-	if vim.bo.filetype == "neo-tree" then
-		vim.cmd.wincmd("p")
-	else
-		vim.cmd.Neotree("focus")
-	end
-end, { desc = "toggle focus" })
+-- vim.keymap.set(modes, "<leader>o", function()
+-- 	if vim.bo.filetype == "neo-tree" then
+-- 		vim.cmd.wincmd("p")
+-- 	else
+-- 		vim.cmd.Neotree("focus")
+-- 	end
+-- end, { desc = "toggle focus" })
 
 require("matlab").setup({
 	executable = "/home/andrei/.local/MATLAB/R2025b/bin/matlab",

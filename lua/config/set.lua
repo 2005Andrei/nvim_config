@@ -126,7 +126,7 @@ vim.filetype.add({
 vim.api.nvim_create_user_command("OpenFile", function()
 	local filepath = vim.api.nvim_buf_get_name(0)
 	vim.system({ "xdg-open", filepath })
-	-- if filepath:match("%.png") or filepath:match("%.jpg") then -- yeah I'll replace ts later, rn it'll make do
+	-- if filepath:match("%.png") or filepath:match("%.jpg") then -- yeah I'll replace ts later, rn it'll do
 	-- 	vim.system({ "xdg-open", filepath })
 	-- else
 	-- 	vim.notify("Not png/jpg", "utility", {
@@ -136,6 +136,22 @@ vim.api.nvim_create_user_command("OpenFile", function()
 end, {})
 
 vim.keymap.set("n", "<leader>fo", "<Cmd>OpenFile<Cr>", { desc = "Open current jpg/png" })
+
+vim.api.nvim_create_user_command("CopyBufAsFile", function()
+	local buf = vim.api.nvim_buf_get_name(0)
+	local uri = vim.uri_from_fname(buf) .. "\n"
+	-- vim.nvim_exec2("xclip -i -selection clipboard -t text " .. buf) for X11
+
+	vim.fn.system({ "wl-copy", "-t", "text/uri-list" }, uri)
+
+	if vim.v.shell_error == 0 then
+		vim.notify("copied the file " .. buf)
+	else
+		vim.notify("did not work")
+	end
+end, {})
+
+vim.keymap.set("n", "<leader>cf", ":CopyBufAsFile <CR>", { desc = "Open current file if it's typst" })
 
 vim.api.nvim_create_user_command("OpendPdf", function()
 	local filepath = vim.api.nvim_buf_get_name(0)
