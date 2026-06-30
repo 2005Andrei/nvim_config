@@ -45,6 +45,9 @@ vim.pack.add({
 	{ src = "https://github.com/3rd/image.nvim" },
 	{ src = "https://github.com/antosha417/nvim-lsp-file-operations" },
 	{ src = "https://github.com/s1n7ax/nvim-window-picker" },
+
+	-- keep buffer sizes
+	{ src = "https://github.com/kwkarlwang/bufresize.nvim" },
 })
 
 require("notify").setup({})
@@ -251,6 +254,7 @@ vim.keymap.set("n", "<leader>fm", builtin.man_pages, { desc = "Telescope Man Pag
 vim.keymap.set("n", "<leader>fe", "<Cmd>Telescope env<CR>", { desc = "env vars" })
 vim.keymap.set("n", "<leader>fd", builtin.diagnostics, { desc = "diagnostics" })
 vim.keymap.set("n", "<leader>fk", builtin.keymaps, { desc = "keymaps" })
+vim.keymap.set("n", "<leader>fn", ":Telescope notify<Cr>", { desc = "notification history" })
 
 vim.keymap.set("n", "<leader>fl", builtin.git_bcommits, { desc = "git commits" })
 
@@ -573,6 +577,26 @@ require("conform").setup({
 	},
 })
 
+require("b+fresize").setup({
+	register = {
+		keys = {
+			{ "n", "<leader>r<", "30<C-w><", { noremap = true, silent = true } },
+			{ "n", "<leader>r>", "30<C-w>>", { noremap = true, silent = true } },
+			{ "n", "<leader>rp", "10<C-w>+", { noremap = true, silent = true } },
+			{ "n", "<leader>rm", "10<C-w>-", { noremap = true, silent = true } },
+			{ "n", "<leader>r_", "<C-w>_", { noremap = true, silent = true } },
+			{ "n", "<leader>r=", "<C-w>=", { noremap = true, silent = true } },
+			{ "n", "<leader>r|", "<C-w>|", { noremap = true, silent = true } },
+			{ "n", "<leader>ro", "<C-w>|<C-w>_", { noremap = true, silent = true } },
+		},
+	},
+	resize = {
+		keys = {},
+		trigger_event = { "VimResized" },
+		increment = 10,
+	},
+})
+
 vim.treesitter.language.register("c_sharp", "cs")
 
 vim.lsp.enable({
@@ -618,7 +642,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opts)
 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = args.buf, desc = "go to definition" })
 		vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = args.buf, desc = "hover docs" })
-		vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, { buffer = args.buf, desc = "rename symbol" })
+		vim.keymap.set("n", "<leader>fn", vim.lsp.buf.rename, { buffer = args.buf, desc = "rename symbol" })
 		vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { buffer = args.buf, desc = "code action" })
 	end,
 })
@@ -647,6 +671,28 @@ require("matlab").setup({
 	auto_start = true,
 	default_mappings = true,
 	minimal_notifications = true,
+})
+
+-- to do: check this shi
+require("bufresize").setup({
+	register = {
+		keys = {
+			{ "n", "<leader>r<", "30<C-w><", { silent = true, noremap = true } },
+			{ "n", "<leader>r>", "30<C-w>>", { silent = true, noremap = true } },
+			{ "n", "<leader>rp", "10<C-w>+", { silent = true, noremap = true } },
+			{ "n", "<leader>rm", "10<C-w>-", { silent = true, noremap = true } },
+			{ "n", "<leader>r_", "<C-w>_", { silent = true, noremap = true } },
+			{ "n", "<leader>r=", "<C-w>=", { silent = true, noremap = true } },
+			{ "n", "<leader>r|", "<C-w>|", { silent = true, noremap = true } },
+			{ "n", "<leader>ro", "<C-w>|<C-w>_", { silent = true, noremap = true } },
+		},
+		trigger_events = { "BufWinEnter", "WinEnter" },
+	},
+	resize = {
+		keys = {},
+		trigger_events = { "VimResized" },
+		increment = false,
+	},
 })
 
 local dap = require("dap")
