@@ -577,7 +577,7 @@ require("conform").setup({
 	},
 })
 
-require("b+fresize").setup({
+require("bufresize").setup({
 	register = {
 		keys = {
 			{ "n", "<leader>r<", "30<C-w><", { noremap = true, silent = true } },
@@ -671,28 +671,6 @@ require("matlab").setup({
 	auto_start = true,
 	default_mappings = true,
 	minimal_notifications = true,
-})
-
--- to do: check this shi
-require("bufresize").setup({
-	register = {
-		keys = {
-			{ "n", "<leader>r<", "30<C-w><", { silent = true, noremap = true } },
-			{ "n", "<leader>r>", "30<C-w>>", { silent = true, noremap = true } },
-			{ "n", "<leader>rp", "10<C-w>+", { silent = true, noremap = true } },
-			{ "n", "<leader>rm", "10<C-w>-", { silent = true, noremap = true } },
-			{ "n", "<leader>r_", "<C-w>_", { silent = true, noremap = true } },
-			{ "n", "<leader>r=", "<C-w>=", { silent = true, noremap = true } },
-			{ "n", "<leader>r|", "<C-w>|", { silent = true, noremap = true } },
-			{ "n", "<leader>ro", "<C-w>|<C-w>_", { silent = true, noremap = true } },
-		},
-		trigger_events = { "BufWinEnter", "WinEnter" },
-	},
-	resize = {
-		keys = {},
-		trigger_events = { "VimResized" },
-		increment = false,
-	},
 })
 
 local dap = require("dap")
