@@ -48,6 +48,10 @@ vim.pack.add({
 
 	-- keep buffer sizes
 	{ src = "https://github.com/kwkarlwang/bufresize.nvim" },
+
+	-- compiler
+	{ src = "https://github.com/Zeioth/compiler.nvim" },
+	{ src = "https://github.com/stevearc/overseer.nvim" },
 })
 
 require("notify").setup({})
@@ -438,15 +442,6 @@ require("dashboard").setup({
 		horizontal_center = true,
 		header = {
 			"",
-			-- [[  ▄████   ▓█████ ▄▄▄█████▓    ▄▄▄█████▓  ▒█████  ]],
-			-- [[ ██▒ ▀█▒  ▓█   ▀ ▓  ██▒ ▓▒    ▓  ██▒ ▓▒ ▒██▒  ██▒]],
-			-- [[▒██░▄▄▄░  ▒███   ▒ ▓██░ ▒░    ▒ ▓██░ ▒░ ▒██░  ██▒]],
-			-- [[░▓█  ██▓  ▒▓█  ▄ ░ ▓██▓ ░     ░ ▓██▓ ░  ▒██   ██░]],
-			-- [[░▒▓███▀▒  ░▒████▒  ▒██▒ ░       ▒██▒ ░  ░ ████▓▒░]],
-			-- [[ ░▒   ▒   ░░ ▒░ ░  ▒ ░░         ▒ ░░    ░ ▒░▒░▒░ ]],
-			-- [[  ░   ░    ░ ░  ░  ░            ░         ░ ▒ ▒░ ]],
-			-- [[░ ░   ░      ░     ░            ░       ░ ░ ░ ▒  ]],
-			-- [[                                            ░ ░  ]],
 			"",
 			[[█     █░  ▒█████   ██▀███   ██   █ ]],
 			[[▓█░ █ ░█░▒██▒  ██▒▓██ ▒ ██▒▓██  █▒ ]],
@@ -597,6 +592,19 @@ require("bufresize").setup({
 	},
 })
 
+require("overseer").setup({})
+require("compiler").setup({})
+
+vim.api.nvim_set_keymap("n", "<leader>oc", "<cmd>CompilerOpen<Cr>", { noremap = true, silent = true })
+vim.api.nvim_set_keymap("n", "<C-c>", "<cmd>compilerStop<Cr>", { noremap = true, silent = true })
+
+-- vim.api.nvim_create_autocmd("CompilerMakeSolution", {
+-- 	callback = function(args)
+-- 		-- todo: add solution builder with custom commmands
+-- 		vim.notify("to do")
+-- 	end,
+-- })
+--
 vim.treesitter.language.register("c_sharp", "cs")
 
 vim.lsp.enable({
