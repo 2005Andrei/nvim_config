@@ -154,10 +154,24 @@ end, {})
 
 vim.keymap.set("n", "<leader>cf", ":CopyBufAsFile <CR>", { desc = "Open current file if it's typst" })
 
+-- vim.api.nvim_create_autocmd("BufEnter", {
+-- 	pattern = "*.typ",
+-- 	callback = function()
+-- 		local dir = vim.fn.expand("%:p:h") .. "/pdf"
+-- 		if vim.fn.isdirectory(dir) == 0 then
+-- 			vim.fn.mkdir(dir, "p")
+-- 		end
+-- 	end,
+-- })
+
 vim.api.nvim_create_user_command("OpendPdf", function()
 	local filepath = vim.api.nvim_buf_get_name(0)
 	if filepath:match("%.typ$") then
 		local pdf_path = filepath:gsub("%.typ$", ".pdf")
+
+		-- local i = pdf_path:match(".*/()")
+		-- local pdf_dir_path = pdf_path:sub(1, i - 1) .. "pdf/" .. pdf_path:sub(i)
+
 		vim.system({ "xdg-open", pdf_path })
 	else
 		vim.notify("No.", "utility", {
@@ -167,7 +181,23 @@ vim.api.nvim_create_user_command("OpendPdf", function()
 	end
 end, {})
 
+vim.api.nvim_create_user_command("MovePdfs", function()
+	-- local execute = function(cmd)
+	-- 	vim.api.nvim_command(":!" .. cmd)
+	-- end
+	--
+	-- execute("mkdir -p pdf && mv *.pdf ./pdf")
+
+	if vim.fn.isdirectory("pdf") == 0 then
+		vim.fn.mkdir("pdf", "p")
+	end
+
+	vim.fn.system("mv *.pdf ./pdf 2>/dev/null")
+	vim.notify("moved pdfs", vim.log.levels.INFO, { title = "pdfs" })
+end, {})
+
 vim.keymap.set("n", "<leader>to", ":OpendPdf <CR>", { desc = "Open current file if it's typst" })
+vim.keymap.set("n", "<leader>tp", ":MovePdfs <CR>", {})
 
 vim.keymap.set("i", "<Tab>", function()
 	if vim.fn.pumvisible() == 1 then
