@@ -53,6 +53,14 @@
       "rev": "d28a3f70721c79e3c5f6693057ae929f3d9c0a03",
       "src": "https://github.com/lukas-reineke/indent-blankline.nvim"
     },
+    "ipynb.nvim": {
+      "rev": "9ec5b566dc37417b17d7e9de04d673506176e9fd",
+      "src": "https://github.com/ajbucci/ipynb.nvim"
+    },
+    "jupynium.nvim": {
+      "rev": "dbd632bfa7883244c36152fc97fd6da54c443eed",
+      "src": "https://github.com/kiyoon/jupynium.nvim"
+    },
     "kanagawa.nvim": {
       "rev": "aef7f5cec0a40dbe7f3304214850c472e2264b10",
       "src": "https://github.com/rebelot/kanagawa.nvim"
@@ -72,6 +80,10 @@
     "neo-tree.nvim": {
       "rev": "aa3500f7038a32ed4b0b765cd458b9c429062cac",
       "src": "https://github.com/nvim-neo-tree/neo-tree.nvim"
+    },
+    "neominimap.nvim": {
+      "rev": "0676085d898019f06044923934e38663f5efa290",
+      "src": "https://github.com/Isrothy/neominimap.nvim"
     },
     "nui.nvim": {
       "rev": "de740991c12411b663994b2860f1a4fd0937c130",

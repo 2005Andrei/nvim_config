@@ -212,3 +212,5 @@ vim.keymap.set("i", "<Tab>", function()
 		return "<Tab>"
 	end
 end, { expr = true, replace_keycodes = true, desc = "Accept completion with Tab" })
+
+vim.keymap.set("n", "<leader>t", ":terminal <CR>", {})

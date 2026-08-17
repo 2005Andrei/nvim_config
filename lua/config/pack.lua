@@ -49,9 +49,16 @@ vim.pack.add({
 	-- keep buffer sizes
 	{ src = "https://github.com/kwkarlwang/bufresize.nvim" },
 
+	-- nvim minimap
+	{ src = "https://github.com/Isrothy/neominimap.nvim" },
+
 	-- compiler
 	{ src = "https://github.com/Zeioth/compiler.nvim" },
 	{ src = "https://github.com/stevearc/overseer.nvim" },
+
+	-- jupynium, ipybrn
+	{ src = "https://github.com/kiyoon/jupynium.nvim" },
+	-- { src = "https://github.com/ajbucci/ipynb.nvim" },
 })
 
 require("notify").setup({})
@@ -538,6 +545,7 @@ require("conform").setup({
 		javascriptreact = { "prettier" },
 		typescriptreact = { "prettier" },
 		xml = { "xmllint" },
+		qml = { "qmlformat" },
 	},
 	format_on_save = {
 		lsp_fallback = true,
@@ -587,6 +595,7 @@ vim.api.nvim_set_keymap("n", "<C-c>", "<cmd>compilerStop<Cr>", { noremap = true,
 -- })
 --
 vim.treesitter.language.register("c_sharp", "cs")
+vim.treesitter.language.register("qmljs", "qml")
 
 vim.lsp.enable({
 	"lua_ls",
@@ -600,6 +609,15 @@ vim.lsp.enable({
 	"matlab_ls",
 	"csharp_ls",
 })
+
+-- qml setup
+vim.lsp.config.qml = {
+	cmd = { "qml-language-server" },
+	filetypes = { "qml" },
+	root_markers = { "qmldir", ".git" },
+}
+
+vim.lsp.enable("qml")
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 vim.lsp.config("tinymist", {
@@ -690,7 +708,7 @@ dap.configurations.cs = {
 		name = "Launch - netcoredbg",
 		request = "launch",
 		program = function()
-			return vim.fn.input("Path to dll: ", vim.fn.getcwd() .. "/bin/Debug/net8.0/GestionarCont.dll", "file")
+			return vim.fn.input("Path to dll: ", vim.fn.getcwd() .. "/bin/Debug/net8.0/*.dll", "file")
 		end,
 	},
 }
@@ -707,3 +725,37 @@ end, { desc = "DAP Step Into" })
 vim.keymap.set("n", "<F9>", function()
 	require("dap").toggle_breakpoint()
 end, { desc = "DAP Breakpoint" })
+
+require("jupynium").setup({})
+-- require("ipynb").setup({
+-- 	kernel = {
+-- 		python_path = "/usr/bin/python3",
+-- 	},
+-- })
+
+vim.g.neominimap = {
+	auto_enable = true,
+
+	exclude_filetypes = {
+		"",
+		"alpha",
+		"dashboard",
+		"starter",
+		"lazy",
+		"mason",
+		"help",
+		"neo-tree",
+		"NvimTree",
+		"TelescopePrompt",
+	},
+
+	exclude_buftypes = {
+		"nofile",
+		"nowrite",
+		"quickfix",
+		"terminal",
+		"prompt",
+	},
+}
+
+vim.keymap.set("n", "<leader>z", "<Cmd>Neominimap TabToggle<Cr>", { desc = "toggle minimap" })
