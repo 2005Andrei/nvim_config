@@ -49,8 +49,9 @@ vim.pack.add({
 	-- keep buffer sizes
 	{ src = "https://github.com/kwkarlwang/bufresize.nvim" },
 
-	-- nvim minimap
+	-- nvim minimap, preview images in neeovim
 	{ src = "https://github.com/Isrothy/neominimap.nvim" },
+	{ src = "https://github.com/3rd/image.nvim" },
 
 	-- compiler
 	{ src = "https://github.com/Zeioth/compiler.nvim" },
@@ -596,6 +597,7 @@ vim.api.nvim_set_keymap("n", "<C-c>", "<cmd>compilerStop<Cr>", { noremap = true,
 --
 vim.treesitter.language.register("c_sharp", "cs")
 vim.treesitter.language.register("qmljs", "qml")
+-- vim.treesitter.language.register("v")
 
 vim.lsp.enable({
 	"lua_ls",
@@ -759,3 +761,8 @@ vim.g.neominimap = {
 }
 
 vim.keymap.set("n", "<leader>z", "<Cmd>Neominimap TabToggle<Cr>", { desc = "toggle minimap" })
+
+require("image").setup({
+	dependencies = { "luarocks.nvim" },
+	opts = {},
+})
