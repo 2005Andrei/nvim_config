@@ -765,4 +765,9 @@ vim.keymap.set("n", "<leader>z", "<Cmd>Neominimap TabToggle<Cr>", { desc = "togg
 require("image").setup({
 	dependencies = { "luarocks.nvim" },
 	opts = {},
+	integrations = {
+		typst = {
+			enabled = false,
+		},
+	},
 })

@@ -214,3 +214,12 @@ vim.keymap.set("i", "<Tab>", function()
 end, { expr = true, replace_keycodes = true, desc = "Accept completion with Tab" })
 
 vim.keymap.set("n", "<leader>t", ":terminal <CR>", {})
+
+function insertFullPath()
+	-- local filepath = vim.fn.expand("%")
+	local filepath = vim.api.nvim_buf_get_name(0)
+
+	vim.fn.setreg("+", filepath)
+end
+
+vim.keymap.set("n", "<leader>pc", insertFullPath, { noremap = true, silent = true })
