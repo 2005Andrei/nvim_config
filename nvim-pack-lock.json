@@ -7,7 +7,7 @@
     "blink.cmp": {
       "rev": "456d38d1cd3743926f329204c2340f3e7840aad6",
       "src": "https://github.com/saghen/blink.cmp",
-      "version": "'*'"
+      "version": "'v0.11.0'"
     },
     "bufferline.nvim": {
       "rev": "655133c3b4c3e5e05ec549b9f8cc2894ac6f51b3",
@@ -44,6 +44,10 @@
     "dashboard-nvim": {
       "rev": "62a10d9d55132b338dd742afc3c8a2683f3dd426",
       "src": "https://github.com/nvimdev/dashboard-nvim"
+    },
+    "friendly-snippets": {
+      "rev": "b4d01b0fdf3c9a549961c2f9ffe8dc09be166219",
+      "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "image.nvim": {
       "rev": "da2be65c153ba15a14a342b05591652a6df70d58",
@@ -169,6 +173,10 @@
     "popup.nvim": {
       "rev": "b7404d35d5d3548a82149238289fa71f7f6de4ac",
       "src": "https://github.com/nvim-lua/popup.nvim"
+    },
+    "render-markdown.nvim": {
+      "rev": "4663eb3ecd538bd5062628fb6d95bbe6bdca78f6",
+      "src": "https://github.com/MeanderingProgrammer/render-markdown.nvim"
     },
     "telescope-env.nvim": {
       "rev": "00a703cc7b713cdda0a981d88fddf3ce25502af5",

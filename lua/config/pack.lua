@@ -28,6 +28,10 @@ vim.pack.add({
 	-- lsp
 	{ src = "https://github.com/mason-org/mason.nvim" },
 	{ src = "https://github.com/neovim/nvim-lspconfig" },
+	-- for tsx
+	{ src = "https://github.com/Saghen/blink.cmp", version = "v0.11.0" },
+	{ src = "https://github.com/rafamadriz/friendly-snippets" },
+	{ src = "https://github.com/windwp/nvim-ts-autotag" },
 
 	-- telescope
 	{ src = "http://github.com/aznhe21/actions-preview.nvim" },
@@ -60,6 +64,9 @@ vim.pack.add({
 	-- jupynium, ipybrn
 	{ src = "https://github.com/kiyoon/jupynium.nvim" },
 	-- { src = "https://github.com/ajbucci/ipynb.nvim" },
+
+	-- markdown renderer
+	{ src = "https://github.com/MeanderingProgrammer/render-markdown.nvim" },
 })
 
 require("notify").setup({})
@@ -451,7 +458,7 @@ require("dashboard").setup({
 		header = {
 			"",
 			"",
-			"Work and that's it",
+			"Get good",
 			"",
 			"No excuses",
 			"",
@@ -594,10 +601,28 @@ vim.api.nvim_set_keymap("n", "<C-c>", "<cmd>compilerStop<Cr>", { noremap = true,
 -- 		vim.notify("to do")
 -- 	end,
 -- })
---
+
+require("blink.cmp").setup({
+	keymap = {
+		preset = "default",
+		["<CR>"] = { "accept", "fallback" },
+		["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
+		["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+	},
+	appearance = {
+		use_nvim_cmp_as_default = true,
+		nerd_font_variant = "mono",
+	},
+	sources = {
+		default = { "lsp", "path", "snippets", "buffer" },
+	},
+	signature = { enabled = true },
+})
+
+-- lsp config
+
 vim.treesitter.language.register("c_sharp", "cs")
 vim.treesitter.language.register("qmljs", "qml")
--- vim.treesitter.language.register("v")
 
 vim.lsp.enable({
 	"lua_ls",
@@ -635,29 +660,79 @@ vim.lsp.config("tinymist", {
 	},
 })
 
+capabilities = require("blink.cmp").get_lsp_capabilities()
+vim.lsp.config("ts_ls", {
+	capabilities = capabilities,
+	settings = {
+		javascript = {
+			suggest = {
+				autoImports = true,
+			},
+		},
+		typescript = {
+			suggest = {
+				autoImports = true,
+			},
+			preferences = {
+				includePackageJsonAutoImports = "auto",
+			},
+		},
+	},
+})
+
+vim.lsp.config("tailwindcss", {
+	capabilities = capabilities,
+})
+
 vim.api.nvim_create_autocmd("LspAttach", {
 	group = vim.api.nvim_create_augroup("my.lsp", {}),
 	callback = function(args)
-		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
-		if client:supports_method("textDocument/completion") then
-			local chars = {}
-			for i = 32, 126 do
-				table.insert(chars, string.char(i))
-			end
-			client.server_capabilities.completionProvider.triggerCharacters = chars
-			vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
-		end
-
-		local opts = { buffer = args.buf, desc = "LSP Go to definition" }
-		vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opts)
-		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = args.buf, desc = "go to definition" })
-		vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = args.buf, desc = "hover docs" })
-		vim.keymap.set("n", "<leader>fn", vim.lsp.buf.rename, { buffer = args.buf, desc = "rename symbol" })
-		vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { buffer = args.buf, desc = "code action" })
+		local opts = { buffer = args.buf }
+		vim.keymap.set(
+			"n",
+			"gd",
+			require("telescope.builtin").lsp_definitions,
+			vim.tbl_extend("force", opts, { desc = "LSP Go to definition" })
+		)
+		vim.keymap.set(
+			"n",
+			"gD",
+			vim.lsp.buf.declaration,
+			vim.tbl_extend("force", opts, { desc = "Go to declaration" })
+		)
+		vim.keymap.set("n", "K", vim.lsp.buf.hover, vim.tbl_extend("force", opts, { desc = "Hover docs" }))
+		vim.keymap.set("n", "<leader>fn", vim.lsp.buf.rename, vim.tbl_extend("force", opts, { desc = "Rename symbol" }))
+		vim.keymap.set(
+			{ "n", "v" },
+			"<leader>ca",
+			vim.lsp.buf.code_action,
+			vim.tbl_extend("force", opts, { desc = "Code action" })
+		)
 	end,
 })
 
-modes = { "v", "n", "x" }
+-- vim.api.nvim_create_autocmd("LspAttach", {
+-- 	group = vim.api.nvim_create_augroup("my.lsp", {}),
+-- 	callback = function(args)
+-- 		local client = assert(vim.lsp.get_client_by_id(args.data.client_id))
+-- 		if client:supports_method("textDocument/completion") then
+-- 			local chars = {}
+-- 			for i = 32, 126 do
+-- 				table.insert(chars, string.char(i))
+-- 			end
+-- 			client.server_capabilities.completionProvider.triggerCharacters = chars
+-- 			vim.lsp.completion.enable(true, client.id, args.buf, { autotrigger = true })
+-- 		end
+--
+-- 		local opts = { buffer = args.buf, desc = "LSP Go to definition" }
+-- 		vim.keymap.set("n", "gd", require("telescope.builtin").lsp_definitions, opts)
+-- 		vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { buffer = args.buf, desc = "go to definition" })
+-- 		vim.keymap.set("n", "K", vim.lsp.buf.hover, { buffer = args.buf, desc = "hover docs" })
+-- 		vim.keymap.set("n", "<leader>fn", vim.lsp.buf.rename, { buffer = args.buf, desc = "rename symbol" })
+-- 		vim.keymap.set({ "n", "v" }, "<leader>ca", vim.lsp.buf.code_action, { buffer = args.buf, desc = "code action" })
+-- 	end,
+-- })
+
 vim.keymap.set("n", "<leader>e", function()
 	require("neo-tree.command").execute({ toggle = true, dir = vim.loop.cwd() })
 end, { desc = "neotree explorer" })
@@ -670,6 +745,7 @@ end, { desc = "neotree explorer" })
 -- 	end
 -- end, { desc = "toggle focus" })
 
+-- matlab
 require("matlab").setup({
 	executable = "/home/andrei/.local/MATLAB/R2025b/bin/matlab",
 
@@ -771,3 +847,5 @@ require("image").setup({
 		},
 	},
 })
+
+require("render-markdown").setup({})
