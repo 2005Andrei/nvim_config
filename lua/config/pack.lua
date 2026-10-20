@@ -605,9 +605,14 @@ vim.api.nvim_set_keymap("n", "<C-c>", "<cmd>compilerStop<Cr>", { noremap = true,
 require("blink.cmp").setup({
 	keymap = {
 		preset = "default",
-		["<CR>"] = { "accept", "fallback" },
-		["<Tab>"] = { "select_next", "snippet_forward", "fallback" },
-		["<S-Tab>"] = { "select_prev", "snippet_backward", "fallback" },
+
+		["<Tab>"] = { "accept", "snippet_forward", "fallback" },
+		["<S-Tab>"] = { "snippet_backward", "fallback" },
+
+		["<CR>"] = { "fallback" },
+
+		["<C-n>"] = { "select_next", "fallback" },
+		["<C-p>"] = { "select_prev", "fallback" },
 	},
 	appearance = {
 		use_nvim_cmp_as_default = true,
@@ -618,7 +623,6 @@ require("blink.cmp").setup({
 	},
 	signature = { enabled = true },
 })
-
 -- lsp config
 
 vim.treesitter.language.register("c_sharp", "cs")
@@ -825,6 +829,7 @@ vim.g.neominimap = {
 		"neo-tree",
 		"NvimTree",
 		"TelescopePrompt",
+		"txt",
 	},
 
 	exclude_buftypes = {
