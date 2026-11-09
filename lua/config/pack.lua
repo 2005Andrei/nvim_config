@@ -166,25 +166,34 @@ require("kanagawa").setup({
 	end,
 })
 
+vim.cmd("colorscheme kanagawa-dragon")
+
 -- source: https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/slanted-gaps.lua
 
 local colors = {
-	red = "#ca1243",
-	grey = "#a0a1a7",
-	black = "#383a42",
-	white = "#f3f3f3",
-	light_green = "#83a598",
-	orange = "#fe8019",
-	green = "#8ec07c",
+	red = "#c4746e",
+	grey = "#a6a69c",
+	black = "#282727",
+	white = "#c5c9c5",
+	light_green = "#8ea4a2",
+	orange = "#b6927b",
+	green = "#87a987",
 	dark_blue = "#2D4F67",
-	gray = "#d3d3d3",
+	gray = "#9e9b93",
+	yellow = "#c4b28a",
+	blue = "#8ba4b0",
+	violet = "#8992a7",
+	pink = "#a292a3",
+	ash = "#737c73",
+	bg_dark = "#181616",
+	bg_mid = "#393836",
 }
 
 local function process_sections(sections)
 	for name, section in pairs(sections) do
 		local left = name:sub(9, 10) < "x"
 		for pos = 1, name ~= "lualine_z" and #section or #section - 1 do
-			table.insert(section, pos * 2, { empty, color = { fg = colors.white, bg = colors.black } })
+			table.insert(section, pos * 2, { empty, color = { fg = colors.white, bg = colors.bg_dark } })
 		end
 		for id, comp in ipairs(section) do
 			if type(comp) ~= "table" then
@@ -242,10 +251,10 @@ require("lualine").setup({
 				colored = true,
 				diff_color = {
 					added = { fg = colors.green },
-					modified = { fg = colors.orange },
+					modified = { fg = colors.yellow },
 					removed = { fg = colors.red },
 				},
-				color = { bg = colors.dark_blue },
+				color = { bg = colors.bg_mid },
 				symbols = { added = "+", modified = "~", removed = "-" },
 				source = "git",
 				separator = { left = "", right = "" },
@@ -254,7 +263,7 @@ require("lualine").setup({
 				"diagnostics",
 				source = { "nvim" },
 				sections = { "error" },
-				diagnostics_color = { warn = { fg = colors.red, bg = colors.black } },
+				diagnostics_color = { error = { fg = colors.red, bg = colors.black } },
 			},
 			{
 				"diagnostics",
@@ -267,24 +276,24 @@ require("lualine").setup({
 			{
 				"filename",
 				path = 3,
-				color = { fg = "#c5c9c5", bg = "#181616" },
+				color = { fg = colors.white, bg = colors.bg_dark },
 				separator = { left = "", right = "" },
 			},
 		},
 		lualine_x = {
 			{
 				"encoding",
-				color = { fg = "#c5c9c5", bg = "#282727" },
+				color = { fg = colors.gray, bg = colors.black },
 				separator = { left = "", right = "" },
 			},
 			{
 				"fileformat",
-				color = { bg = colors.grey, fg = "#2D4F67" },
+				color = { bg = colors.bg_mid, fg = colors.violet, gui = "bold" },
 				separator = { left = "", right = "" },
 			},
 			{
 				"filetype",
-				color = { fg = colors.gray, bg = colors.black },
+				color = { fg = colors.white, bg = colors.bg_dark },
 				separator = { left = "", right = "" },
 			},
 		},
@@ -310,8 +319,6 @@ require("lualine").setup({
 	inactive_winbar = {},
 	extensions = {},
 })
-
-vim.cmd("colorscheme kanagawa-dragon")
 
 local telescope = require("telescope")
 telescope.setup({
