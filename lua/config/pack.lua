@@ -166,12 +166,43 @@ require("kanagawa").setup({
 	end,
 })
 
+-- source: https://github.com/nvim-lualine/lualine.nvim/blob/master/examples/slanted-gaps.lua
+
+local colors = {
+	red = "#ca1243",
+	grey = "#a0a1a7",
+	black = "#383a42",
+	white = "#f3f3f3",
+	light_green = "#83a598",
+	orange = "#fe8019",
+	green = "#8ec07c",
+	dark_blue = "#2D4F67",
+	gray = "#d3d3d3",
+}
+
+local function process_sections(sections)
+	for name, section in pairs(sections) do
+		local left = name:sub(9, 10) < "x"
+		for pos = 1, name ~= "lualine_z" and #section or #section - 1 do
+			table.insert(section, pos * 2, { empty, color = { fg = colors.white, bg = colors.black } })
+		end
+		for id, comp in ipairs(section) do
+			if type(comp) ~= "table" then
+				comp = { comp }
+				section[id] = comp
+			end
+			comp.separator = left and { right = "" } or { left = "" }
+		end
+	end
+	return sections
+end
+
 require("lualine").setup({
 	options = {
 		icons_enabled = true,
-		theme = "auto",
-		component_separators = { left = "", right = "" },
-		section_separators = { left = "", right = "" },
+		theme = "kanagawa-dragon",
+		component_separators = "",
+		section_separators = { left = "", right = "" },
 		disabled_filetypes = {
 			statusline = {},
 			winbar = {},
@@ -179,7 +210,7 @@ require("lualine").setup({
 		ignore_focus = {},
 		always_divide_middle = true,
 		always_show_tabline = true,
-		globalstatus = false,
+		globalstatus = true,
 		refresh = {
 			statusline = 1000,
 			tabline = 1000,
@@ -201,22 +232,76 @@ require("lualine").setup({
 	},
 	sections = {
 		lualine_a = { "mode" },
-		lualine_b = { "branch", "diff", "diagnostics" },
-		lualine_c = { "filename" },
-		lualine_x = { "encoding", "fileformat", "filetype" },
-		lualine_y = { "progress", "location" },
+		lualine_b = {
+			{
+				"branch",
+				separator = { right = "" },
+			},
+			{
+				"diff",
+				colored = true,
+				diff_color = {
+					added = { fg = colors.green },
+					modified = { fg = colors.orange },
+					removed = { fg = colors.red },
+				},
+				color = { bg = colors.dark_blue },
+				symbols = { added = "+", modified = "~", removed = "-" },
+				source = "git",
+				separator = { left = "", right = "" },
+			},
+			{
+				"diagnostics",
+				source = { "nvim" },
+				sections = { "error" },
+				diagnostics_color = { warn = { fg = colors.red, bg = colors.black } },
+			},
+			{
+				"diagnostics",
+				source = { "nvim" },
+				sections = { "warn" },
+				diagnostics_color = { warn = { fg = colors.orange, bg = colors.black } },
+			},
+		},
+		lualine_c = {
+			{
+				"filename",
+				path = 3,
+				color = { fg = "#c5c9c5", bg = "#181616" },
+				separator = { left = "", right = "" },
+			},
+		},
+		lualine_x = {
+			{
+				"encoding",
+				color = { fg = "#c5c9c5", bg = "#282727" },
+				separator = { left = "", right = "" },
+			},
+			{
+				"fileformat",
+				color = { bg = colors.grey, fg = "#2D4F67" },
+				separator = { left = "", right = "" },
+			},
+			{
+				"filetype",
+				color = { fg = colors.gray, bg = colors.black },
+				separator = { left = "", right = "" },
+			},
+		},
+		lualine_y = {},
 		lualine_z = {
 			{
 				"datetime",
 				style = "%H:%M",
+				separator = { left = "", right = "" },
 			},
 		},
 	},
 	inactive_sections = {
 		lualine_a = {},
 		lualine_b = {},
-		lualine_c = { "filename" },
-		lualine_x = { "location" },
+		lualine_c = {},
+		lualine_x = {},
 		lualine_y = {},
 		lualine_z = {},
 	},
