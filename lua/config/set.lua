@@ -63,6 +63,9 @@ vim.keymap.set("n", "<C-l>", "<C-w>l")
 vim.keymap.set("v", "<", "<gv", { desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent right and reselect" })
 
+vim.keymap.set({ "v", "n" }, "<C-u>", "<C-u>zz")
+vim.keymap.set({ "v", "n" }, "<C-d>", "<C-d>zz")
+
 -- more clipboard keymaps
 local opts = { noremap = true, silent = true }
 local modes = { "n", "v", "x" }
@@ -224,3 +227,11 @@ function insertFullPath()
 end
 
 vim.keymap.set("n", "<leader>pc", insertFullPath, { noremap = true, silent = true })
+
+vim.api.nvim_create_autocmd("BufWinEnter", {
+	callback = function()
+		if vim.bo.buftype == "help" then
+			vim.cmd.wincmd("T")
+		end
+	end,
+})
