@@ -53,6 +53,11 @@ vim.keymap.set("n", "<C-Down>", ":resize -2<CR>")
 vim.keymap.set("n", "<C-Left>", ":vertical resize -2<CR>")
 vim.keymap.set("n", "<C-Right>", ":vertical resize +2<CR>")
 
+-- tabpage keybinds
+vim.keymap.set("n", "<C-n>", ":tabnew <CR>")
+vim.keymap.set({ "n", "v" }, "gk", "gt")
+vim.keymap.set({ "n", "v" }, "gj", "gT")
+
 -- window navigation
 vim.keymap.set("n", "<C-h>", "<C-w>h")
 vim.keymap.set("n", "<C-j>", "<C-w>j")
